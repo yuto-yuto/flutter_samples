@@ -9,12 +9,7 @@ class ScaffoldFooterView extends StatelessWidget {
         children: [
           _createFloating(),
           _createPersistentFooter(),
-          Scaffold(
-            appBar: AppBar(
-              title: Text("Scaffold in Scaffold"),
-            ),
-            body: _createPersistentFooter(),
-          ),
+          _createPersistentFooter2(),
         ],
       ),
     );
@@ -70,6 +65,16 @@ class ScaffoldFooterView extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _createPersistentFooter2() {
+    return Scaffold(
+      // appear on the keyboard
+      appBar: AppBar(
+        title: Text("Scaffold in Scaffold"),
+      ),
+      body: _createPersistentFooter(),
     );
   }
 }
