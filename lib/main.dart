@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_samples/DynamicTextField.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 
 void main() {
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
     final listView = ListView(
       children: [
         _createButton(ScaffoldFooterView()),
+        _createButton(DynamicTextFieldView()),
       ],
     );
 
