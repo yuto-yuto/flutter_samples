@@ -1,38 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DynamicTextFieldView extends StatefulWidget {
+class DynamicTextFieldView extends StatelessWidget {
   @override
-  _DynamicTextFieldView createState() => _DynamicTextFieldView();
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: PageView(
+        children: [
+          _View1(),
+          _View2(),
+        ],
+      ),
+    );
+  }
 }
 
-class _DynamicTextFieldView extends State<DynamicTextFieldView> {
+class _View1 extends StatefulWidget {
+  @override
+  _View1State createState() => _View1State();
+}
+
+class _View1State extends State<_View1> {
   List<TextEditingController> _controllers = [];
   List<TextField> _fields = [];
-  Map<String, TextEditingController> _controllerMap = Map();
 
   @override
   void dispose() {
     for (final controller in _controllers) {
       controller.dispose();
     }
-    _controllerMap.forEach((_, controller) => controller.dispose());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: PageView(
-        children: [
-          _view1(),
-          _view2(),
-        ],
-      ),
-    );
-  }
-
-  Widget _view1() {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -107,9 +108,24 @@ class _DynamicTextFieldView extends State<DynamicTextFieldView> {
       child: Text("OK"),
     );
   }
+}
 
-  // for view2
-  Widget _view2() {
+class _View2 extends StatefulWidget {
+  @override
+  _View2State createState() => _View2State();
+}
+
+class _View2State extends State<_View2> {
+  Map<String, TextEditingController> _controllerMap = Map();
+
+  @override
+  void dispose() {
+    _controllerMap.forEach((_, controller) => controller.dispose());
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -118,22 +134,23 @@ class _DynamicTextFieldView extends State<DynamicTextFieldView> {
           body: Column(
             children: [
               Expanded(child: _futureBuilder()),
-              _okButton2(),
+              _okButton(),
             ],
           )),
     );
   }
 
+  List<String> _data = [
+    "one",
+    "two",
+    "three",
+    "four",
+  ];
   Future<List<String>> _retrieveData() {
-    return Future.value([
-      "one",
-      "two",
-      "three",
-      "four",
-    ]);
+    return Future.value(_data);
   }
 
-  Widget _okButton2() {
+  Widget _okButton() {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,10 +166,31 @@ class _DynamicTextFieldView extends State<DynamicTextFieldView> {
           child: Text("Cancel"),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            String text = _controllerMap.values
+                .fold("", (acc, element) => acc += "${element.text}\n");
+            final alert = AlertDialog(
+              title: Text("Updated"),
+              content: Text(text),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) => alert,
+            );
+
             setState(() {
               _controllerMap.forEach((key, controller) {
+                int index = _controllerMap.keys.toList().indexOf(key);
                 key = controller.text;
+                _data[index] = controller.text;
               });
             });
           },
