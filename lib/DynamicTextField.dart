@@ -85,8 +85,9 @@ class _View1State extends State<_View1> {
   Widget _okButton() {
     return ElevatedButton(
       onPressed: () async {
-        String text =
-            _controllers.fold("", (acc, element) => acc += "${element.text}\n");
+        String text = _controllers
+            .where((element) => element.text != "")
+            .fold("", (acc, element) => acc += "${element.text}\n");
         final alert = AlertDialog(
           title: Text("Count: ${_controllers.length}"),
           content: Text(text),
@@ -134,7 +135,7 @@ class _View2State extends State<_View2> {
           body: Column(
             children: [
               Expanded(child: _futureBuilder()),
-              _okButton(),
+              _cancelOkButton(),
             ],
           )),
     );
@@ -150,53 +151,66 @@ class _View2State extends State<_View2> {
     return Future.value(_data);
   }
 
-  Widget _okButton() {
+  Widget _cancelOkButton() {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _controllerMap.forEach((key, controller) {
-                controller.text = key;
-              });
-            });
-          },
-          child: Text("Cancel"),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            String text = _controllerMap.values
-                .fold("", (acc, element) => acc += "${element.text}\n");
-            final alert = AlertDialog(
-              title: Text("Updated"),
-              content: Text(text),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("OK"),
-                ),
-              ],
-            );
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) => alert,
-            );
+        _cancelButton(),
+        _okButton(),
+      ],
+    );
+  }
 
-            setState(() {
-              _controllerMap.forEach((key, controller) {
-                int index = _controllerMap.keys.toList().indexOf(key);
-                key = controller.text;
-                _data[index] = controller.text;
-              });
-            });
+  Widget _cancelButton() {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          _controllerMap.forEach((key, controller) {
+            controller.text = key;
+          });
+        });
+      },
+      child: Text("Cancel"),
+    );
+  }
+
+  Widget _okButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        String text = _controllerMap.values
+            .where((element) => element.text != "")
+            .fold("", (acc, element) => acc += "${element.text}\n");
+        await _showUpdatedDialog(text);
+
+        setState(() {
+          _controllerMap.forEach((key, controller) {
+            int index = _controllerMap.keys.toList().indexOf(key);
+            key = controller.text;
+            _data[index] = controller.text;
+          });
+        });
+      },
+      child: Text("OK"),
+    );
+  }
+
+  Future _showUpdatedDialog(String text) {
+    final alert = AlertDialog(
+      title: Text("Updated"),
+      content: Text(text),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
           },
           child: Text("OK"),
         ),
       ],
+    );
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
     );
   }
 
