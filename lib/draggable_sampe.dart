@@ -95,7 +95,8 @@ class _DraggableSample extends State<DraggableSample> {
 
   Border border = Border.all(color: Colors.black, width: 5);
   Widget _createDragTarget(BuildContext context) {
-    return DragTarget<String>(
+    // It doesn't work if specifying inproper data type
+    final target = DragTarget<String>(
       builder: (
         BuildContext context,
         List<dynamic> accepted,
@@ -106,7 +107,6 @@ class _DraggableSample extends State<DraggableSample> {
             'Milk: $milkCount\n';
 
         return Container(
-          margin: EdgeInsets.only(top: 100),
           height: 100,
           width: 200,
           child: Text(text),
@@ -129,6 +129,11 @@ class _DraggableSample extends State<DraggableSample> {
           border = _setBorder(Colors.black);
         });
       },
+    );
+    
+    return Container(
+      padding: EdgeInsets.only(top: 100),
+      child: target,
     );
   }
 
