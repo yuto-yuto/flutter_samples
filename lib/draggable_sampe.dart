@@ -19,6 +19,7 @@ class _DraggableSample extends State<DraggableSample> {
   int eggCount = 0;
   int baconCount = 0;
   int milkCount = 0;
+  int cheeseCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class _DraggableSample extends State<DraggableSample> {
     final bacon = _createFood("Bacon");
     final milk = _createFood("Milk");
     final baconEggGroup = _createExpansionTile("baconEgg", [egg, bacon, milk]);
+    final cheese = _createFood("Cheese");
 
     return SafeArea(
       child: Scaffold(
@@ -35,6 +37,7 @@ class _DraggableSample extends State<DraggableSample> {
         body: Column(
           children: [
             _createDraggable(context, baconEggGroup),
+            _createDraggable(context, cheese),
             _createDragTarget(context),
           ],
         ),
@@ -95,7 +98,7 @@ class _DraggableSample extends State<DraggableSample> {
 
   Border border = Border.all(color: Colors.black, width: 5);
   Widget _createDragTarget(BuildContext context) {
-    // It doesn't work if specifying inproper data type
+    // onMove and onAccept aren't called if specifying inproper data type
     final target = DragTarget<String>(
       builder: (
         BuildContext context,
@@ -104,7 +107,8 @@ class _DraggableSample extends State<DraggableSample> {
       ) {
         final text = 'Egg: $eggCount\n'
             'Bacon: $baconCount\n'
-            'Milk: $milkCount\n';
+            'Milk: $milkCount\n'
+            'Cheese: $cheeseCount\n';
 
         return Container(
           height: 100,
@@ -126,11 +130,14 @@ class _DraggableSample extends State<DraggableSample> {
           eggCount += data.contains("Egg") ? 1 : 0;
           milkCount += data.contains("Milk") ? 1 : 0;
           baconCount += data.contains("Bacon") ? 1 : 0;
+          cheeseCount += data.contains("Cheese") ? 1 : 0;
           border = _setBorder(Colors.black);
         });
       },
+      onLeave: (data) => border = _setBorder(Colors.black),
+      onWillAccept: (data) => data != "Cheese",
     );
-    
+
     return Container(
       padding: EdgeInsets.only(top: 100),
       child: target,
