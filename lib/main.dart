@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_samples/DynamicTextField.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
+import 'package:flutter_samples/draggable_sampe.dart';
 import 'package:flutter_samples/grouped_extension_tile_sample.dart';
 
 void main() {
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         _createButton(ScaffoldFooterView()),
         _createButton(DynamicTextFieldView()),
         _createButton(GroupedExtensionTileSample()),
+        _createButton(DraggableSample()),
       ],
     );
 

@@ -70,10 +70,10 @@ packages:
   grouped_expansion_tile:
     dependency: "direct main"
     description:
-      path: "../grouped_expansion_tile"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: grouped_expansion_tile
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   matcher:
     dependency: transitive
     description:
