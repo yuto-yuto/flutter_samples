@@ -75,7 +75,7 @@ class _DraggableSample extends State<DraggableSample> {
     // not work
     // final feedback = ListTile(
     //   leading: const Icon(Icons.directions_run),
-    //   title: Text("Food"),
+    //   title: Text(data.value),
     // );
 
     final feedback = Material(
