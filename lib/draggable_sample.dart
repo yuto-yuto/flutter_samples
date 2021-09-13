@@ -27,7 +27,7 @@ class _DraggableSample extends State<DraggableSample> {
     final bacon = _createFood("Bacon");
     final milk = _createFood("Milk");
     final baconEggGroup = _createExpansionTile("baconEgg", [egg, bacon, milk]);
-    final cheese = _createFood("Cheese");
+    final cheese = _createFood("Cheese won't be accepted");
 
     return SafeArea(
       child: Scaffold(
@@ -135,7 +135,7 @@ class _DraggableSample extends State<DraggableSample> {
         });
       },
       onLeave: (data) => border = _setBorder(Colors.black),
-      onWillAccept: (data) => data != "Cheese",
+      onWillAccept: (data) => data?.contains("Cheese") == false,
     );
 
     return Container(
