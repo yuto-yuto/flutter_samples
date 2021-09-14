@@ -120,11 +120,6 @@ class _DraggableSample extends State<DraggableSample> {
           ),
         );
       },
-      onMove: (details) {
-        setState(() {
-          border = _setBorder(Colors.red);
-        });
-      },
       onAccept: (data) {
         setState(() {
           eggCount += data.contains("Egg") ? 1 : 0;
@@ -132,6 +127,11 @@ class _DraggableSample extends State<DraggableSample> {
           baconCount += data.contains("Bacon") ? 1 : 0;
           cheeseCount += data.contains("Cheese") ? 1 : 0;
           border = _setBorder(Colors.black);
+        });
+      },
+      onMove: (details) {
+        setState(() {
+          border = _setBorder(Colors.red);
         });
       },
       onLeave: (data) => border = _setBorder(Colors.black),
