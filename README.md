@@ -2,5 +2,4 @@
 
 Flutter samples for my blog.
 
-https://www.technicalfeeder.com/
-
+https://www.technicalfeeder.com/category/dart/
