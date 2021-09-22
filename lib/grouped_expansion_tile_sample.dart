@@ -14,7 +14,7 @@ class Category implements GroupBase {
   });
 }
 
-class GroupedExtensionTileSample extends StatelessWidget {
+class GroupedExpansionTileSample extends StatelessWidget {
   List<Category> _createList() {
     return [
       Category(uid: "1", name: "group-1"),
@@ -37,7 +37,7 @@ class GroupedExtensionTileSample extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: Text("Grouped Extension Sample"),
+        title: Text("Grouped ExPansion Sample"),
       ),
       body: groupedExpansionTile,
     ));
