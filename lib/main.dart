@@ -4,6 +4,7 @@ import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/provider_sample.dart';
+import 'package:flutter_samples/scrollable_draggable.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         _createButton(GroupedExpansionTileSample()),
         _createButton(DraggableSample()),
         _createButton(ProviderSample()),
+        _createButton(ScrollableDraggable()),
       ],
     );
 
