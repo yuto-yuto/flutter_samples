@@ -66,6 +66,8 @@ class _ScrollingDragger extends State<ScrollableDraggable> {
     return Listener(
       child: child,
       onPointerMove: (PointerMoveEvent event) {
+        print("x: ${event.position.dx}, y: ${event.position.dy}");
+
         if (!_isDragging) {
           return;
         }
@@ -74,6 +76,11 @@ class _ScrollingDragger extends State<ScrollableDraggable> {
         Offset position = render.localToGlobal(Offset.zero);
         double topY = position.dy;
         double bottomY = topY + render.size.height;
+
+        print("x: ${position.dy}, "
+            "y: ${position.dy}, "
+            "height: ${render.size.width}, "
+            "width: ${render.size.height}");
 
         const detectedRange = 100;
         const moveDistance = 3;
