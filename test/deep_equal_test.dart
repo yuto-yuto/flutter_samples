@@ -72,6 +72,12 @@ void main() {
         expect(obj1 == obj2, true);
         expect(obj2 == obj1, true);
       });
+      test('should return false when uid is different', () {
+        final obj1 = ComparedClass(texts: ["123"], uid: 1);
+        final obj2 = ComparedClass(texts: ["1234"], uid: 2);
+        expect(obj1 == obj2, false);
+        expect(obj2 == obj1, false);
+      });
       test('should return true when comparing with extended class', () {
         final obj1 = ComparedClass(texts: ["123"], uid: 1);
         final obj2 = ExtendedClass(foo: "2", texts: ["1234"], uid: 1);
