@@ -49,6 +49,7 @@ class _ScrollingDragger extends State<ScrollableDraggable> {
           ),
           onDragStarted: () => _isDragging = true,
           onDragEnd: (details) => _isDragging = false,
+          onDraggableCanceled: (velocity, offset) => _isDragging = false,
         );
 
         if (index != itemCount) {
