@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_samples/DynamicTextField.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/provider_sample.dart';
+import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 
 void main() {
-  runApp(MaterialApp(
-    title: "App",
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
+  runApp(
+    ProviderScope(
+      child: MaterialApp(
+        title: "App",
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyApp(),
+      ),
     ),
-    home: MyApp(),
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +48,7 @@ class MyApp extends StatelessWidget {
         _createButton(DraggableSample()),
         _createButton(ProviderSample()),
         _createButton(ScrollableDraggable()),
+        _createButton(RiverpodWithList()),
       ],
     );
 
