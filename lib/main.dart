@@ -5,6 +5,7 @@ import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/provider_sample.dart';
+import 'package:flutter_samples/riverpod/riverpod-with-visibility.dart';
 import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         _createButton(ProviderSample()),
         _createButton(ScrollableDraggable()),
         _createButton(RiverpodWithList()),
+        _createButton(RiverpodWithVisibility()),
       ],
     );
 
