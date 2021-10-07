@@ -131,7 +131,7 @@ packages:
     source: hosted
     version: "6.0.0"
   riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
