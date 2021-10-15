@@ -11,7 +11,6 @@ class DynamicTextFieldWithRiverpod extends StatelessWidget {
           _View1(),
           _View2(),
           _View3(),
-          // _View4(),
         ],
       ),
     );
