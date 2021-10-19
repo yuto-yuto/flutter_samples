@@ -6,6 +6,7 @@ import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/provider_sample.dart';
 import 'package:flutter_samples/riverpod/dynamic_textfield_with_riverpod.dart';
+import 'package:flutter_samples/riverpod/multi_providers.dart';
 import 'package:flutter_samples/riverpod/riverpod-with-visibility.dart';
 import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         },
         child: Text(
           view.toString(),
-          textScaleFactor: 2,
+          textScaleFactor: 1.5,
         ),
       );
     }
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         _createButton(RiverpodWithList()),
         _createButton(RiverpodWithVisibility()),
         _createButton(DynamicTextFieldWithRiverpod()),
+        _createButton(MultiProviders()),
       ],
     );
 
