@@ -69,6 +69,7 @@ class MultiProviders extends StatelessWidget {
         children: [
           _View1(),
           _View2(),
+          _View3(),
         ],
       ),
     );
@@ -220,6 +221,72 @@ class _View2 extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text("Multi Providers2")),
+      body: Column(
+        children: [
+          button,
+          Expanded(child: listView),
+        ],
+      ),
+      persistentFooterButtons: [
+        Visibility(
+          child: Center(child: Text("FOOTER")),
+          visible: context.read(_stateProvider).state,
+        ),
+      ],
+    );
+  }
+}
+
+// ================================
+
+final _dataProvider =
+    FutureProvider<List<MyData>>((ref) => _fetchFromDatabase());
+final _controllersProvider =
+    StateProvider.autoDispose<Map<int, TextEditingController>>((ref) {
+  return ref.watch(_dataProvider).maybeWhen(
+        data: (list) {
+          final Map<int, TextEditingController> controllers = {};
+          for (final data in list) {
+            controllers[data.uid] = TextEditingController(text: data.name);
+          }
+          return controllers;
+        },
+        orElse: () => {},
+      );
+});
+final _controllerProvider =
+    StateProvider.autoDispose.family<TextEditingController?, int>((ref, uid) {
+  final controllers = ref.watch(_controllersProvider).state;
+  ref.onDispose(() => print("controller for uid $uid was disposed"));
+  return controllers[uid];
+});
+
+class _View3 extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final button = _createEditButton(context);
+
+    final listView = watch(_dataProvider).maybeWhen(
+      data: (list) {
+        return ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            final myData = list[index];
+            final controller = watch(_controllerProvider(myData.uid)).state;
+            return TextField(
+              controller: controller,
+              enabled: watch(_stateProvider).state,
+            );
+          },
+        );
+      },
+      orElse: () => Center(
+        child: Text("Loading3"),
+      ),
+    );
+
+    return Scaffold(
+      appBar: AppBar(title: Text("Multi Providers3")),
       body: Column(
         children: [
           button,
