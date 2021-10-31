@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_samples/dialog.dart';
 import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         _createButton(RiverpodWithVisibility()),
         _createButton(DynamicTextFieldWithRiverpod()),
         _createButton(MultiProviders()),
+        _createButton(DialogSample()),
       ],
     );
 
