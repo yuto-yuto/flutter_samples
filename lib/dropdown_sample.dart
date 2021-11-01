@@ -7,14 +7,27 @@ class DropdownSample extends StatefulWidget {
 }
 
 class _DropDownSample extends State<DropdownSample> {
+  final list = ["Apple", "Orange", "Kiwi", "Banana", "Grape"];
+  List<DropdownMenuItem<String>> _createList() {
+    return list
+        .map<DropdownMenuItem<String>>(
+          (e) => DropdownMenuItem(
+            value: e,
+            child: Text(e),
+          ),
+        )
+        .toList();
+  }
+
   String? _selectedItem1;
-  Widget onChangedWithoutValue() {
-    final dropdown = createDropdown(
-      onChanged: (value) => setState(() {
+  Widget _onChangedWithoutValue() {
+    final dropdown = DropdownButton(
+      items: _createList(),
+      onChanged: (String? value) => setState(() {
         _selectedItem1 = value ?? "";
       }),
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       dropdown,
       "Notify Value change \n without value",
       _selectedItem1,
@@ -22,14 +35,15 @@ class _DropDownSample extends State<DropdownSample> {
   }
 
   String? _selectedItem2;
-  Widget onChangedWithValue() {
-    final dropdown = createDropdown(
+  Widget _onChangedWithValue() {
+    final dropdown = DropdownButton(
+      items: _createList(),
       value: _selectedItem2,
-      onChanged: (value) => setState(() {
+      onChanged: (String? value) => setState(() {
         _selectedItem2 = value ?? "";
       }),
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       dropdown,
       "Notify Value change \n with value",
       _selectedItem2,
@@ -37,15 +51,16 @@ class _DropDownSample extends State<DropdownSample> {
   }
 
   String? _selectedItem3;
-  Widget withHint() {
-    final dropdown = createDropdown(
+  Widget _withHint() {
+    final dropdown = DropdownButton(
+      items: _createList(),
       hint: Text("Choose an item"),
       value: _selectedItem3,
-      onChanged: (value) => setState(() {
+      onChanged: (String? value) => setState(() {
         _selectedItem3 = value ?? "";
       }),
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       dropdown,
       "With Hint",
       _selectedItem3,
@@ -53,26 +68,28 @@ class _DropDownSample extends State<DropdownSample> {
   }
 
   String _selectedItem4 = "Orange";
-  Widget initialValue() {
-    final dropdown = createDropdown(
+  Widget _initialValue() {
+    final dropdown = DropdownButton(
+      items: _createList(),
       hint: Text("Choose an item"),
       value: _selectedItem4,
-      onChanged: (value) => setState(() {
+      onChanged: (String? value) => setState(() {
         _selectedItem4 = value ?? "";
       }),
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       dropdown,
       "Initial value",
       _selectedItem4,
     );
   }
 
-  Widget disableHint() {
-    final dropdown = createDropdown(
+  Widget _disableHint() {
+    final dropdown = DropdownButton(
+      items: _createList(),
       disabledHint: Text("Disable Hint"),
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       dropdown,
       "Disable Hint",
       _selectedItem4,
@@ -82,7 +99,7 @@ class _DropDownSample extends State<DropdownSample> {
   String _selectedItem5 = "";
   bool _enable = true;
   String _buttonText = "disable";
-  Widget disable() {
+  Widget _disable() {
     final onChanged = (value) => setState(() {
           _selectedItem5 = value ?? "";
         });
@@ -98,11 +115,12 @@ class _DropDownSample extends State<DropdownSample> {
       }),
       child: Text(_buttonText),
     );
-    final dropdown = createDropdown(
+    final dropdown = DropdownButton(
+      items: _createList(),
       disabledHint: Text("Disable Hint"),
       onChanged: _enable ? onChanged : null,
     );
-    return createDropdownContainer(
+    return _createDropdownContainer(
       Column(children: [
         Center(child: disableButton),
         dropdown,
@@ -114,9 +132,12 @@ class _DropDownSample extends State<DropdownSample> {
 
   @override
   Widget build(BuildContext context) {
-    final onlyItems = createDropdown();
-    final backColor =
-        createDropdown(onChanged: (value) {}, dropdownColor: Colors.cyan);
+    final onlyItems = DropdownButton(items: _createList());
+    final backColor = DropdownButton(
+      items: _createList(),
+      onChanged: (value) {},
+      dropdownColor: Colors.cyan,
+    );
 
     return SafeArea(
       child: Scaffold(
@@ -127,14 +148,14 @@ class _DropDownSample extends State<DropdownSample> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                addLabelTo(onlyItems, "Only Items"),
-                onChangedWithoutValue(),
-                onChangedWithValue(),
-                initialValue(),
-                withHint(),
-                disableHint(),
-                disable(),
-                addLabelTo(backColor, "Change back color"),
+                _addLabelTo(onlyItems, "Only Items"),
+                _onChangedWithoutValue(),
+                _onChangedWithValue(),
+                _initialValue(),
+                _withHint(),
+                _disableHint(),
+                _disable(),
+                _addLabelTo(backColor, "Change back color"),
               ],
             ),
           ),
@@ -143,40 +164,7 @@ class _DropDownSample extends State<DropdownSample> {
     );
   }
 
-  Widget createResultArea(String? value) {
-    return Padding(
-      child: Text("selected item: $value"),
-      padding: EdgeInsetsDirectional.only(top: 30),
-    );
-  }
-
-  Widget createDropdown({
-    String? value,
-    Widget? hint,
-    void Function(String?)? onChanged,
-    Color? dropdownColor,
-    Widget? disabledHint,
-  }) {
-    const list = ["Apple", "Orange", "Kiwi", "Banana", "Grape"];
-
-    return DropdownButton(
-      value: value,
-      hint: hint,
-      onChanged: onChanged,
-      dropdownColor: dropdownColor,
-      disabledHint: disabledHint,
-      items: list
-          .map<DropdownMenuItem<String>>(
-            (e) => DropdownMenuItem(
-              value: e,
-              child: Text(e),
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  Widget addLabelTo(Widget child, String text) {
+  Widget _addLabelTo(Widget child, String text) {
     return Row(
       children: [
         Expanded(
@@ -193,7 +181,8 @@ class _DropDownSample extends State<DropdownSample> {
     );
   }
 
-  Widget createDropdownContainer(Widget dropdown, String label, String? value) {
+  Widget _createDropdownContainer(
+      Widget dropdown, String label, String? value) {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -201,7 +190,7 @@ class _DropDownSample extends State<DropdownSample> {
       ),
       child: Column(
         children: [
-          addLabelTo(dropdown, label),
+          _addLabelTo(dropdown, label),
           Padding(
             child: Text("selected item: $value"),
             padding: EdgeInsetsDirectional.only(top: 10, bottom: 10),
