@@ -12,30 +12,63 @@ class _DialogSample extends State<DialogSample> {
 
   @override
   Widget build(BuildContext context) {
+    final defaultAlertDialog = ElevatedButton(
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(),
+        );
+      },
+      child: Text("Default Alert Dialog"),
+    );
+    final alertDialogWithoutButton = ElevatedButton(
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Text("Hello"),
+          ),
+        );
+      },
+      child: Text("Alert Dialog without button"),
+    );
     final alertDialog = ElevatedButton(
       onPressed: () async {
-        await alert(context, "Error message here");
+        await showAlert(context, "Error message here");
       },
       child: Text("Alert Dialog without Title"),
     );
     final alertDialogWithTitle = ElevatedButton(
       onPressed: () async {
-        await alert(context, "Error message here 2", "Message");
+        await showAlert(context, "Error message here", "Message");
       },
       child: Text("Alert Dialog with Title"),
     );
+
     final alertDialogWithResult = ElevatedButton(
       onPressed: () async {
-        final result = await alert(context, "Error message here 3", "Message");
+        final result =
+            await showAlert(context, "Error message here", "Message");
         setState(() {
           this.result = result;
         });
       },
       child: Text("Alert Dialog with result"),
     );
+
+    final alertList = ElevatedButton(
+      onPressed: () async {
+        final list = [for (int i = 0; i < 50; i++) i.toString()];
+        final result = await showAlertList(context, list, "List");
+        setState(() {
+          this.result = result;
+        });
+      },
+      child: Text("Alert List"),
+    );
     final alertCupertino = CupertinoButton(
       onPressed: () async {
-        final result = await alertCuperutino(
+        final result = await showAlertCuperutino(
           context,
           "Error message for cupertino",
           "ERROR",
@@ -72,9 +105,12 @@ class _DialogSample extends State<DialogSample> {
         body: Center(
           child: Column(
             children: [
+              defaultAlertDialog,
+              alertDialogWithoutButton,
               alertDialog,
               alertDialogWithTitle,
               alertDialogWithResult,
+              alertList,
               alertCupertino,
               simpleDialog,
               Padding(
@@ -89,11 +125,35 @@ class _DialogSample extends State<DialogSample> {
     );
   }
 
-  Future<String?> alert(
+Future<String?> showAlert(
+  BuildContext context,
+  String msg, [
+  String? title,
+]) {
+  final ok = TextButton(
+    onPressed: () {
+      Navigator.of(context).pop("OK");
+    },
+    child: Text("OK"),
+  );
+
+  final alert = AlertDialog(
+    title: title != null ? Text(title) : null,
+    content: Text(msg),
+    actions: [ok],
+  );
+
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) => alert,
+  );
+}
+
+  Future<String?> showAlertList(
     BuildContext context,
-    String msg, [
+    List<String> msg, [
     String? title,
-  ]) async {
+  ]) {
     final ok = TextButton(
       onPressed: () {
         Navigator.of(context).pop("OK");
@@ -103,7 +163,11 @@ class _DialogSample extends State<DialogSample> {
 
     final alert = AlertDialog(
       title: title != null ? Text(title) : null,
-      content: Text(msg),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: msg.map((e) => Text(e)).toList(),
+        ),
+      ),
       actions: [ok],
     );
 
@@ -113,7 +177,7 @@ class _DialogSample extends State<DialogSample> {
     );
   }
 
-  Future<String?> alertCuperutino(
+  Future<String?> showAlertCuperutino(
     BuildContext context,
     String msg, [
     String? title,
@@ -147,6 +211,7 @@ class _DialogSample extends State<DialogSample> {
 
     final simple = SimpleDialog(
       title: Text("Age"),
+      insetPadding: EdgeInsets.symmetric(horizontal: 120.0, vertical: 200.0),
       children: [
         for (int i = 0; i < 99; i++)
           SimpleDialogOption(
