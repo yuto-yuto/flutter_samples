@@ -92,11 +92,11 @@ class _DropDownSample extends State<DropdownSample> {
     return _createDropdownContainer(
       dropdown,
       "Disable Hint",
-      _selectedItem4,
+      "",
     );
   }
 
-  String _selectedItem5 = "";
+  String? _selectedItem5;
   bool _enable = true;
   String _buttonText = "disable";
   Widget _disable() {
@@ -116,6 +116,7 @@ class _DropDownSample extends State<DropdownSample> {
       child: Text(_buttonText),
     );
     final dropdown = DropdownButton(
+      value: _selectedItem5,
       items: _createList(),
       disabledHint: Text("Disable Hint"),
       onChanged: _enable ? onChanged : null,
