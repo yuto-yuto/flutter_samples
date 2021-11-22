@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_samples/dialog.dart';
+import 'package:flutter_samples/drawer.dart';
 import 'package:flutter_samples/dropdown_sample.dart';
 import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
         _createButton(MultiProviders()),
         _createButton(DialogSample()),
         _createButton(DropdownSample()),
+        _createButton(DrawerSample()),
       ],
     );
 
