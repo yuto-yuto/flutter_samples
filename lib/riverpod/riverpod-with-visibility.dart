@@ -63,20 +63,20 @@ class _View2 extends ConsumerWidget {
   final StateProvider<bool> _provider = StateProvider((ref) => false);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: Text("Visibility sample2")),
       body: Center(
         child: IconButton(
           icon: Icon(Icons.edit),
-          onPressed: () =>
-              context.read(_provider).state = !context.read(_provider).state,
+          onPressed: () => ref.read(_provider.state).state =
+              !ref.read(_provider.state).state,
         ),
       ),
       persistentFooterButtons: [
         Visibility(
           child: _createFooterWidgets(2).first,
-          visible: watch(_provider).state,
+          visible: ref.watch(_provider.state).state,
         )
       ],
     );
@@ -85,23 +85,23 @@ class _View2 extends ConsumerWidget {
 
 final _visibleProvider = StateProvider((ref) => false);
 final _footerProvider = StateProvider<List<Widget>?>((ref) {
-  final visible = ref.watch(_visibleProvider).state;
+  final visible = ref.watch(_visibleProvider.state).state;
   return visible ? _createFooterWidgets(3) : null;
 });
 
 class _View3 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: Text("Visibility sample3")),
       body: Center(
         child: IconButton(
           icon: Icon(Icons.edit),
-          onPressed: () => context.read(_visibleProvider).state =
-              !context.read(_visibleProvider).state,
+          onPressed: () => ref.read(_visibleProvider.state).state =
+              !ref.read(_visibleProvider.state).state,
         ),
       ),
-      persistentFooterButtons: watch(_footerProvider).state,
+      persistentFooterButtons: ref.watch(_footerProvider.state).state,
     );
   }
 }
@@ -110,15 +110,15 @@ class _View4 extends ConsumerWidget {
   final StateProvider<bool> _provider = StateProvider((ref) => false);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final visible = watch(_provider).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final visible = ref.watch(_provider.state).state;
     return Scaffold(
       appBar: AppBar(title: Text("Visibility sample4")),
       body: Center(
         child: IconButton(
           icon: Icon(Icons.edit),
-          onPressed: () =>
-              context.read(_provider).state = !context.read(_provider).state,
+          onPressed: () => ref.read(_provider.state).state =
+              !ref.read(_provider.state).state,
         ),
       ),
       persistentFooterButtons: visible ? _createFooterWidgets(4) : null,

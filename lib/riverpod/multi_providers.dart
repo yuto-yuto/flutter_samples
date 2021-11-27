@@ -96,42 +96,42 @@ final _provider2 = StateNotifierProvider.autoDispose<_ParamsListNotifier,
 
 final _stateProvider = StateProvider((ref) => false);
 
-Widget _createEditButton(BuildContext context) {
+Widget _createEditButton(WidgetRef ref) {
   return IconButton(
-    onPressed: () => context.read(_stateProvider).state =
-        !context.read(_stateProvider).state,
+    onPressed: () => ref.read(_stateProvider.state).state =
+        !ref.read(_stateProvider.state).state,
     icon: Icon(Icons.edit),
   );
 }
 
 class _View1 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final button = _createEditButton(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final button = _createEditButton(ref);
 
-    // final listView = watch(_futureProvider).maybeWhen(
-    final listView = watch(_provider2).maybeWhen(
-      data: (data) {
-        return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) => TextField(
-            controller: data
-                .firstWhere((element) => element.data.uid == index)
-                .controller,
-            enabled: watch(_stateProvider).state,
+    // final listView = ref.watch(_futureProvider).maybeWhen(
+    final listView = ref.watch(_provider2).maybeWhen(
+          data: (data) {
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) => TextField(
+                controller: data
+                    .firstWhere((element) => element.data.uid == index)
+                    .controller,
+                enabled: ref.watch(_stateProvider.state).state,
+              ),
+            );
+          },
+          orElse: () => Center(
+            child: Text("Loading"),
           ),
         );
-      },
-      orElse: () => Center(
-        child: Text("Loading"),
-      ),
-    );
 
     final footer = Row(
       children: [
         TextButton(
           onPressed: () async {
-            context.read(_provider2).whenData((list) {
+            ref.read(_provider2).whenData((list) {
               for (final element in list) {
                 element.controller.text = element.data.name;
               }
@@ -141,7 +141,7 @@ class _View1 extends ConsumerWidget {
         ),
         TextButton(
           onPressed: () async {
-            context.read(_provider2).whenData((list) async {
+            ref.read(_provider2).whenData((list) async {
               String msg = "";
               for (final element in list) {
                 msg += "${element.data.name} => ${element.controller.text}\n";
@@ -165,7 +165,7 @@ class _View1 extends ConsumerWidget {
       persistentFooterButtons: [
         Visibility(
           child: footer,
-          visible: context.read(_stateProvider).state,
+          visible: ref.read(_stateProvider.state).state,
         ),
       ],
     );
@@ -192,32 +192,32 @@ final _futureProvider2 =
 
 class _View2 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final button = _createEditButton(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final button = _createEditButton(ref);
 
-    final listView = watch(_futureProvider2).maybeWhen(
-      data: (data) {
-        return data.state.maybeWhen(
-          data: (inState) {
-            return ListView.builder(
-              itemCount: inState.length,
-              itemBuilder: (context, index) => TextField(
-                controller: inState
-                    .firstWhere((element) => element.data.uid == index)
-                    .controller,
-                enabled: watch(_stateProvider).state,
+    final listView = ref.watch(_futureProvider2).maybeWhen(
+          data: (data) {
+            return data.state.maybeWhen(
+              data: (inState) {
+                return ListView.builder(
+                  itemCount: inState.length,
+                  itemBuilder: (context, index) => TextField(
+                    controller: inState
+                        .firstWhere((element) => element.data.uid == index)
+                        .controller,
+                    enabled: ref.watch(_stateProvider.state).state,
+                  ),
+                );
+              },
+              orElse: () => Center(
+                child: Text("Loading2"),
               ),
             );
           },
           orElse: () => Center(
-            child: Text("Loading2"),
+            child: Text("Loading"),
           ),
         );
-      },
-      orElse: () => Center(
-        child: Text("Loading"),
-      ),
-    );
 
     return Scaffold(
       appBar: AppBar(title: Text("Multi Providers2")),
@@ -230,7 +230,7 @@ class _View2 extends ConsumerWidget {
       persistentFooterButtons: [
         Visibility(
           child: Center(child: Text("FOOTER")),
-          visible: context.read(_stateProvider).state,
+          visible: ref.read(_stateProvider.state).state,
         ),
       ],
     );
@@ -256,34 +256,35 @@ final _controllersProvider =
 });
 final _controllerProvider =
     StateProvider.autoDispose.family<TextEditingController?, int>((ref, uid) {
-  final controllers = ref.watch(_controllersProvider).state;
+  final controllers = ref.watch(_controllersProvider.state).state;
   ref.onDispose(() => print("controller for uid $uid was disposed"));
   return controllers[uid];
 });
 
 class _View3 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final button = _createEditButton(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final button = _createEditButton(ref);
 
-    final listView = watch(_dataProvider).maybeWhen(
-      data: (list) {
-        return ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            final myData = list[index];
-            final controller = watch(_controllerProvider(myData.uid)).state;
-            return TextField(
-              controller: controller,
-              enabled: watch(_stateProvider).state,
+    final listView = ref.watch(_dataProvider).maybeWhen(
+          data: (list) {
+            return ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                final myData = list[index];
+                final controller =
+                    ref.watch(_controllerProvider(myData.uid).state).state;
+                return TextField(
+                  controller: controller,
+                  enabled: ref.watch(_stateProvider.state).state,
+                );
+              },
             );
           },
+          orElse: () => Center(
+            child: Text("Loading3"),
+          ),
         );
-      },
-      orElse: () => Center(
-        child: Text("Loading3"),
-      ),
-    );
 
     return Scaffold(
       appBar: AppBar(title: Text("Multi Providers3")),
@@ -296,7 +297,7 @@ class _View3 extends ConsumerWidget {
       persistentFooterButtons: [
         Visibility(
           child: Center(child: Text("FOOTER")),
-          visible: context.read(_stateProvider).state,
+          visible: ref.read(_stateProvider.state).state,
         ),
       ],
     );

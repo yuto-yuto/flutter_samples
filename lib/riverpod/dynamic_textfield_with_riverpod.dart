@@ -22,32 +22,32 @@ class _View1 extends ConsumerWidget {
       Provider.autoDispose<List<TextEditingController>>((ref) => []);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final button = Center(
       child: IconButton(
         onPressed: () {
-          context.read(_provider).add(TextEditingController());
+          ref.read(_provider).add(TextEditingController());
         },
         icon: Icon(Icons.add),
       ),
     );
 
     final listView = ListView.builder(
-      itemCount: watch(_provider).length,
+      itemCount: ref.watch(_provider).length,
       itemBuilder: (context, index) {
         return ListTile(
           leading: IconButton(
             onPressed: () {
-              final list = context.read(_provider);
+              final list = ref.read(_provider);
               list.remove(list[index]);
             },
             icon: Icon(Icons.remove_from_queue),
           ),
           title: TextField(
-            controller: watch(_provider)[index],
+            controller: ref.watch(_provider)[index],
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: "name ${watch(_provider).length + 1}",
+              labelText: "name ${ref.watch(_provider).length + 1}",
             ),
           ),
         );
@@ -101,17 +101,17 @@ final _controllerListProvider = StateNotifierProvider.autoDispose<
 
 class _View2 extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final button = Center(
       child: IconButton(
         onPressed: () {
-          context.read(_controllerListProvider.notifier).add();
+          ref.read(_controllerListProvider.notifier).add();
         },
         icon: Icon(Icons.add),
       ),
     );
 
-    final list = watch(_controllerListProvider);
+    final list = ref.watch(_controllerListProvider);
     final listView = ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -120,7 +120,7 @@ class _View2 extends ConsumerWidget {
         return ListTile(
           leading: IconButton(
             onPressed: () {
-              context.read(_controllerListProvider.notifier).remove(index);
+              ref.read(_controllerListProvider.notifier).remove(index);
             },
             icon: Icon(Icons.remove_from_queue),
           ),
@@ -177,30 +177,30 @@ class _View3 extends ConsumerWidget {
       (ref) => ControllerList2());
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final button = Center(
       child: IconButton(
         onPressed: () {
-          final list = context.read(_controllerList2Provider.notifier);
+          final list = ref.read(_controllerList2Provider.notifier);
           list.add();
         },
         icon: Icon(Icons.add),
       ),
     );
 
-    final list = watch(_controllerList2Provider);
+    final list = ref.watch(_controllerList2Provider);
     final listView = ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) {
         return ListTile(
           leading: IconButton(
             onPressed: () {
-              context.read(_controllerList2Provider.notifier).remove(index);
+              ref.read(_controllerList2Provider.notifier).remove(index);
             },
             icon: Icon(Icons.remove_from_queue),
           ),
           title: TextField(
-            controller: watch(list[index]),
+            controller: ref.watch(list[index]),
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: "name $index / ${list.length}",
