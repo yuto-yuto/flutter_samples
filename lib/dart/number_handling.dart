@@ -8,14 +8,18 @@ void main() {
     123456.0,
   ];
 
-for (final value in values) {
-  print("$value\t: toStringAsPrecision: ${value.toStringAsPrecision(4)}");
-}
-print("");
+  for (final value in values) {
+    print("$value\t: $value");
+  }
 
-for (final value in values) {
-  print("$value\t: toStringAsFixed: ${value.toStringAsFixed(4)}");
-}
+  for (final value in values) {
+    print("$value\t: toStringAsPrecision: ${value.toStringAsPrecision(4)}");
+  }
+  print("");
+
+  for (final value in values) {
+    print("$value\t: toStringAsFixed: ${value.toStringAsFixed(4)}");
+  }
   print("");
 
   for (final value in values) {
@@ -38,10 +42,10 @@ for (final value in values) {
   }
   print("");
 
-for (final value in [...values, 10.50, 10.5, 10.00]) {
-  final isZero = value.truncateToDouble() == value;
-  print("$value\t: currency2: ${value.toStringAsFixed(isZero ? 0 : 2)}");
-}
+  for (final value in [...values, 10.50, 10.5, 10.00]) {
+    final isZero = value.truncateToDouble() == value;
+    print("$value\t: currency2: ${value.toStringAsFixed(isZero ? 0 : 2)}");
+  }
   print("");
 
   for (final value in values) {
