@@ -7,6 +7,7 @@ import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
+import 'package:flutter_samples/loading_next.dart';
 import 'package:flutter_samples/page_transition.dart';
 import 'package:flutter_samples/provider_sample.dart';
 import 'package:flutter_samples/riverpod/dynamic_textfield_with_riverpod.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         _createButton(DropdownSample()),
         _createButton(DrawerSample()),
         _createButton(PageTransition()),
+        _createButton(LoadingNext()),
       ],
     );
 
