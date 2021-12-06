@@ -15,6 +15,7 @@ import 'package:flutter_samples/riverpod/multi_providers.dart';
 import 'package:flutter_samples/riverpod/riverpod-with-visibility.dart';
 import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
+import 'package:flutter_samples/swipe_list_item.dart';
 
 void main() {
   runApp(
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         _createButton(DrawerSample()),
         _createButton(PageTransition()),
         _createButton(LoadingNext()),
+        _createButton(SwipeListItem()),
       ],
     );
 
