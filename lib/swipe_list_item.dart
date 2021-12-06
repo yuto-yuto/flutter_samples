@@ -19,7 +19,7 @@ class _SwipeListItem extends State<SwipeListItem> {
       child: Scaffold(
         key: _key,
         appBar: AppBar(
-          title: Text("Swipe Left Right"),
+          title: Text("Swipe List Item"),
         ),
         body: _createBody(context),
       ),
