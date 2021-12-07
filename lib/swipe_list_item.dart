@@ -31,22 +31,12 @@ class _SwipeListItem extends State<SwipeListItem> {
     final countDisp = Text("Count: ${_data.length}");
     final leftEditIcon = Container(
       color: Colors.green,
-      child: IconButton(
-        icon: Icon(Icons.edit),
-        onPressed: () {
-          // edit
-        },
-      ),
+      child: Icon(Icons.edit),
       alignment: Alignment.centerLeft,
     );
     final rightDeleteIcon = Container(
       color: Colors.red,
-      child: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () {
-          // delete
-        },
-      ),
+      child: Icon(Icons.delete),
       alignment: Alignment.centerRight,
     );
 
@@ -66,38 +56,40 @@ class _SwipeListItem extends State<SwipeListItem> {
                 // Right to left
                 print("Delete");
 
-                // ----- Delete item immediately
+                late int deletedItem;
                 setState(() {
-                  int deletedItem = _data.removeAt(index);
-                  final timer = Timer(
-                    Duration(seconds: 3),
-                    () {
-                      showMessage(
-                        context,
-                        "Execute delete query for database",
-                        "Database Access here",
-                      );
-                    },
-                  );
-
-                  ScaffoldMessenger.of(context)
-                    ..removeCurrentSnackBar()
-                    ..showSnackBar(
-                      SnackBar(
-                        duration: Duration(
-                          seconds: 2,
-                          milliseconds: 500,
-                        ),
-                        content: Text("Deleted \"Item number - $deletedItem\""),
-                        action: SnackBarAction(
-                          label: "UNDO",
-                          onPressed: () => setState(
-                            () => _data.insert(index, deletedItem),
-                          ),
-                        ),
-                      ),
-                    );
+                  deletedItem = _data.removeAt(index);
                 });
+
+                final timer = Timer(
+                  Duration(seconds: 3),
+                  () {
+                    showMessage(
+                      context,
+                      "Execute delete query for database",
+                      "Database Access here",
+                    );
+                  },
+                );
+
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      duration: Duration(
+                        seconds: 2,
+                        milliseconds: 500,
+                      ),
+                      content: Text("Deleted \"Item number - $deletedItem\""),
+                      action: SnackBarAction(
+                        label: "UNDO",
+                        onPressed: () {
+                          timer.cancel();
+                          setState(() => _data.insert(index, deletedItem));
+                        },
+                      ),
+                    ),
+                  );
               }
             },
             confirmDismiss: (DismissDirection direction) async {
@@ -108,11 +100,12 @@ class _SwipeListItem extends State<SwipeListItem> {
                 return Future.value(direction == DismissDirection.endToStart);
               }
             },
+            // direction: DismissDirection.endToStart,
             background: leftEditIcon,
             secondaryBackground: rightDeleteIcon,
-            onResize: () {
-              print("onResize");
-            },
+            // onResize: () {
+            //   print("onResize");
+            // },
             // resizeDuration: Duration(seconds: 3),
             // movementDuration: Duration(seconds: 2),
           );
