@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_samples/dialog.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_samples/dropdown_sample.dart';
 import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
+import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/loading_next.dart';
 import 'package:flutter_samples/page_transition.dart';
@@ -17,7 +19,10 @@ import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(
     ProviderScope(
       child: MaterialApp(
@@ -73,6 +78,7 @@ class MyApp extends StatelessWidget {
         _createButton(PageTransition()),
         _createButton(LoadingNext()),
         _createButton(SwipeListItem()),
+        _createButton(GoogleDriveTest()),
       ],
     );
 
