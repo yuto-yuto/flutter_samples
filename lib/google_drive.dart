@@ -14,10 +14,10 @@ class GoogleDriveTest extends StatefulWidget {
 
 class _GoogleDriveTest extends State<GoogleDriveTest> {
   bool _loginStatus = false;
-  final googleSignIn = GoogleSignIn.standard(scopes: [
-    drive.DriveApi.driveAppdataScope,
-    drive.DriveApi.driveFileScope,
-  ]);
+final googleSignIn = GoogleSignIn.standard(scopes: [
+  drive.DriveApi.driveAppdataScope,
+  drive.DriveApi.driveFileScope,
+]);
 
   @override
   void initState() {
@@ -115,94 +115,25 @@ class _GoogleDriveTest extends State<GoogleDriveTest> {
     print("Sign out");
   }
 
-  Future<void> _uploadToHidden() async {
+  Future<drive.DriveApi?> _getDriveApi() async {
     final googleUser = await googleSignIn.signIn();
     final headers = await googleUser?.authHeaders;
     if (headers == null) {
       await showMessage(context, "Sign-in first", "Error");
-      return;
+      return null;
     }
-
-    // Not allow a user to do something else
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      transitionDuration: Duration(seconds: 2),
-      barrierColor: Colors.black.withOpacity(0.5),
-      pageBuilder: (context, animation, secondaryAnimation) => Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
 
     final client = GoogleAuthClient(headers);
     final driveApi = drive.DriveApi(client);
-
-    // Create data here instead of loading a file
-    final contents = "Technical Feeder";
-    final Stream<List<int>> mediaStream =
-        Future.value(contents.codeUnits).asStream().asBroadcastStream();
-    var media = new drive.Media(mediaStream, contents.length);
-
-    // Set up File info
-    var driveFile = new drive.File();
-    final timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
-    driveFile.name = "technical-feeder-$timestamp.txt";
-    driveFile.modifiedTime = DateTime.now().toUtc();
-    driveFile.parents = ["appDataFolder"];
-
-    // Upload
-    final response = await driveApi.files.create(driveFile, uploadMedia: media);
-    print("response: $response");
-
-    // simulate a slow process
-    await Future.delayed(Duration(seconds: 2));
-    // Remove a dialog
-    Navigator.pop(context);
+    return driveApi;
   }
 
-  Future<String?> _getFolderId(drive.DriveApi driveApi) async {
-    final mimeType = "application/vnd.google-apps.folder";
-    String folderName = "Flutter-sample-by-tf";
-
+  Future<void> _uploadToHidden() async {
     try {
-      final found = await driveApi.files.list(
-        q: "mimeType = '$mimeType' and " + "name = '$folderName'",
-        $fields: "files(id, name)",
-      );
-      final files = found.files;
-      if (files == null) {
-        await showMessage(context, "Sign-in first", "Error");
-        return null;
+      final driveApi = await _getDriveApi();
+      if (driveApi == null) {
+        return;
       }
-
-      if (files.isNotEmpty) {
-        return files.first.id;
-      }
-
-      // Create a folder
-      var folder = new drive.File();
-      folder.name = folderName;
-      folder.mimeType = mimeType;
-      final folderCreation = await driveApi.files.create(folder);
-      print("Folder ID: ${folderCreation.id}");
-
-      return folderCreation.id;
-    } catch (e) {
-      print(e);
-      // I/flutter ( 6132): DetailedApiRequestError(status: 403, message: The granted scopes do not give access to all of the requested spaces.)
-      return null;
-    }
-  }
-
-  Future<void> _uploadToNormal() async {
-    final googleUser = await googleSignIn.signIn();
-    final headers = await googleUser?.authHeaders;
-    if (headers == null) {
-      await showMessage(context, "Sign-in first", "Error");
-      return;
-    }
-
-    try {
       // Not allow a user to do something else
       showGeneralDialog(
         context: context,
@@ -213,16 +144,6 @@ class _GoogleDriveTest extends State<GoogleDriveTest> {
           child: CircularProgressIndicator(),
         ),
       );
-
-      final client = GoogleAuthClient(headers);
-      final driveApi = drive.DriveApi(client);
-
-      final folderId = await _getFolderId(driveApi);
-      if (folderId == null) {
-        await showMessage(context, "Failure", "Error");
-        return;
-      }
-
       // Create data here instead of loading a file
       final contents = "Technical Feeder";
       final Stream<List<int>> mediaStream =
@@ -234,7 +155,7 @@ class _GoogleDriveTest extends State<GoogleDriveTest> {
       final timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
       driveFile.name = "technical-feeder-$timestamp.txt";
       driveFile.modifiedTime = DateTime.now().toUtc();
-      driveFile.parents = [folderId];
+      driveFile.parents = ["appDataFolder"];
 
       // Upload
       final response =
@@ -249,16 +170,94 @@ class _GoogleDriveTest extends State<GoogleDriveTest> {
     }
   }
 
-  Future<void> _showList() async {
-    final googleUser = await googleSignIn.signIn();
-    final headers = await googleUser?.authHeaders;
-    if (headers == null) {
+Future<String?> _getFolderId(drive.DriveApi driveApi) async {
+  final mimeType = "application/vnd.google-apps.folder";
+  String folderName = "Flutter-sample-by-tf";
+
+  try {
+    final found = await driveApi.files.list(
+      q: "mimeType = '$mimeType' and name = '$folderName'",
+      $fields: "files(id, name)",
+    );
+    final files = found.files;
+    if (files == null) {
       await showMessage(context, "Sign-in first", "Error");
+      return null;
+    }
+
+    if (files.isNotEmpty) {
+      return files.first.id;
+    }
+
+    // Create a folder
+    var folder = new drive.File();
+    folder.name = folderName;
+    folder.mimeType = mimeType;
+    final folderCreation = await driveApi.files.create(folder);
+    print("Folder ID: ${folderCreation.id}");
+
+    return folderCreation.id;
+  } catch (e) {
+    print(e);
+    // I/flutter ( 6132): DetailedApiRequestError(status: 403, message: The granted scopes do not give access to all of the requested spaces.)
+    return null;
+  }
+}
+
+Future<void> _uploadToNormal() async {
+  try {
+    final driveApi = await _getDriveApi();
+    if (driveApi == null) {
+      return;
+    }
+    // Not allow a user to do something else
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      transitionDuration: Duration(seconds: 2),
+      barrierColor: Colors.black.withOpacity(0.5),
+      pageBuilder: (context, animation, secondaryAnimation) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    final folderId = await _getFolderId(driveApi);
+    if (folderId == null) {
+      await showMessage(context, "Failure", "Error");
       return;
     }
 
-    final client = GoogleAuthClient(headers);
-    final driveApi = drive.DriveApi(client);
+    // Create data here instead of loading a file
+    final contents = "Technical Feeder";
+    final Stream<List<int>> mediaStream =
+        Future.value(contents.codeUnits).asStream().asBroadcastStream();
+    var media = new drive.Media(mediaStream, contents.length);
+
+    // Set up File info
+    var driveFile = new drive.File();
+    final timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
+    driveFile.name = "technical-feeder-$timestamp.txt";
+    driveFile.modifiedTime = DateTime.now().toUtc();
+    driveFile.parents = [folderId];
+
+    // Upload
+    final response =
+        await driveApi.files.create(driveFile, uploadMedia: media);
+    print("response: $response");
+
+    // simulate a slow process
+    await Future.delayed(Duration(seconds: 2));
+  } finally {
+    // Remove a dialog
+    Navigator.pop(context);
+  }
+}
+
+  Future<void> _showList() async {
+    final driveApi = await _getDriveApi();
+    if (driveApi == null) {
+      return;
+    }
 
     final fileList = await driveApi.files.list(
         spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
