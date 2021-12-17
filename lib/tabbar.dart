@@ -79,7 +79,11 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
           ),
           _wrap(
             context,
-            _child5(context, views),
+            _child5(context, views, _tabBar4()),
+          ),
+          _wrap(
+            context,
+            _child5(context, views, _tabPageSelector()),
           ),
         ],
       ),
@@ -152,7 +156,7 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _child5(BuildContext context, List<Widget> views) {
+  Widget _child5(BuildContext context, List<Widget> views, Widget tabBar) {
     return Scaffold(
       body: TabBarView(
         controller: _controller,
@@ -160,7 +164,7 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
       ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(30),
-        child: _tabPageSelector(),
+        child: tabBar,
       ),
     );
   }
@@ -219,49 +223,25 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
     );
   }
 
-  // TabBar _tabBar4(BuildContext context) {
-  //   // return TabBar(
-  //   //   tabs: [
-  //   //     for (int i = 0; i < 3; i++)
-  //   //       Container(
-  //   //         child: SizedBox.shrink(),
-  //   //         // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-  //   //         height: 10,
-  //   //         width: 50,
-  //   //         decoration: BoxDecoration(
-  //   //           borderRadius: BorderRadius.circular(10),
-  //   //           color: Colors.grey,
-  //   //         ),
-  //   //       )
-  //   //   ],
-  //   //   // indicator: BoxDecoration(
-  //   //   //   borderRadius: BorderRadius.circular(10),
-  //   //   //   backgroundBlendMode: BlendMode.clear,
-  //   //   //   color: Colors.black,
-  //   //   // ),
-  //   // );
-  //   final controller = DefaultTabController.of(context);
-  //   if (controller == null) {
-  //     throw Exception("no default tab controller");
-  //   }
-
-  //   return TabBar(
-  //     tabs: [
-  //       for (int i = 0; i < 3; i++)
-  //         AnimatedBuilder(
-  //           animation: controller.animation!,
-  //           builder: (context, widget) {
-  //             return Container(
-  //               child: Text("View ${i + 1}"),
-  //               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(12),
-  //                 color: controller.index == i ? Colors.black : Colors.grey,
-  //               ),
-  //             );
-  //           },
-  //         )
-  //     ],
-  //   );
-  // }
+  TabBar _tabBar4() {
+    return TabBar(
+      controller: _controller,
+      tabs: [
+        for (int i = 0; i < 3; i++)
+          AnimatedBuilder(
+            animation: _controller.animation!,
+            builder: (context, widget) {
+              return Container(
+                child: Text("View ${i + 1}"),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: _controller.index == i ? Colors.black : Colors.grey,
+                ),
+              );
+            },
+          )
+      ],
+    );
+  }
 }
