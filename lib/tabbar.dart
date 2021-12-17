@@ -160,7 +160,7 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
       ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(30),
-        child: _tabPageSelectogSelector(),
+        child: _tabPageSelector(),
       ),
     );
   }
@@ -208,7 +208,7 @@ class _MyTabbar extends State<MyTabbar> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _tabPageSelectogSelector() {
+  Widget _tabPageSelector() {
     return Center(
       child: TabPageSelector(
         controller: _controller,
