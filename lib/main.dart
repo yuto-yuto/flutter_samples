@@ -18,6 +18,7 @@ import 'package:flutter_samples/riverpod/riverpod-with-visibility.dart';
 import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
+import 'package:flutter_samples/tabbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         _createButton(LoadingNext()),
         _createButton(SwipeListItem()),
         _createButton(GoogleDriveTest()),
+        _createButton(MyTabbar()),
       ],
     );
 
