@@ -8,6 +8,7 @@ import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/google_drive.dart';
+import 'package:flutter_samples/google_drive_search.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/loading_next.dart';
 import 'package:flutter_samples/page_transition.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
         _createButton(LoadingNext()),
         _createButton(SwipeListItem()),
         _createButton(GoogleDriveTest()),
+        _createButton(GoogleDriveSearch()),
         _createButton(MyTabbar()),
       ],
     );
