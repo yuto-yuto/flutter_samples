@@ -39,8 +39,9 @@ class _GoogleDriveSearch extends State<GoogleDriveSearch> {
         Center(child: _createButton("Root list", _root)),
         Center(child: _createButton("Text files", _txt)),
         Center(child: _createButton("Files in temp1 folder", _filesInFolder)),
-        Center(child: _createButton("Files owned by other", _filesOwnedByOther)),
-        Center(child: _createButton("Shared with me", _sharedFiles)),
+        Center(
+            child: _createButton("Files owned by other", _filesOwnedByOther)),
+        Center(child: _createButton("Shared files", _sharedFiles)),
       ],
     );
   }
@@ -84,6 +85,7 @@ class _GoogleDriveSearch extends State<GoogleDriveSearch> {
     final list = await driveApi.files.list(
       spaces: 'drive',
       q: "'me' in owners",
+      $fields: "files(name, mimeType, shared)",
     );
 
     list.files?.removeWhere((element) => element.shared == false);
@@ -123,7 +125,7 @@ class _GoogleDriveSearch extends State<GoogleDriveSearch> {
     try {
       final found = await driveApi.files.list(
         q: "mimeType = '$_folderType' and name = '$folderName'",
-        $fields: "files(id, name)",
+        $fields: "files(id)",
       );
       final files = found.files;
       if (files == null) {
@@ -170,14 +172,13 @@ class _GoogleDriveSearch extends State<GoogleDriveSearch> {
             child: ListView.builder(
               itemCount: files.length,
               itemBuilder: (context, index) {
-                final isFolder = files[index].mimeType ==
-                    "application/vnd.google-apps.folder";
+                final isFolder = files[index].mimeType == _folderType;
 
                 return ListTile(
                   leading: Icon(isFolder
                       ? Icons.folder
                       : Icons.insert_drive_file_outlined),
-                  title: Text(files[index].name ?? "no-name"),
+                  title: Text(files[index].name ?? ""),
                 );
               },
             ),
