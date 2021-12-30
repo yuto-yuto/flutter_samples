@@ -88,6 +88,7 @@ class _DropDownSample extends State<DropdownSample> {
     final dropdown = DropdownButton(
       items: _createList(),
       disabledHint: Text("Disable Hint"),
+      onChanged: null,
     );
     return _createDropdownContainer(
       dropdown,
@@ -133,7 +134,10 @@ class _DropDownSample extends State<DropdownSample> {
 
   @override
   Widget build(BuildContext context) {
-    final onlyItems = DropdownButton(items: _createList());
+    final onlyItems = DropdownButton(
+      items: _createList(),
+      onChanged: null,
+    );
     final backColor = DropdownButton(
       items: _createList(),
       onChanged: (value) {},

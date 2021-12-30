@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_samples/cross_axis_scroll.dart';
 import 'package:flutter_samples/dialog.dart';
 import 'package:flutter_samples/drawer.dart';
 import 'package:flutter_samples/dropdown_sample.dart';
@@ -83,6 +84,7 @@ class MyApp extends StatelessWidget {
         _createButton(GoogleDriveTest()),
         _createButton(GoogleDriveSearch()),
         _createButton(MyTabbar()),
+        _createButton(CrossAxisScroll()),
       ],
     );
 
