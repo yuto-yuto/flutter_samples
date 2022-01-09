@@ -34,20 +34,22 @@ class SplashScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Don't add await keyword
     _onAuthStateChange(context, ref);
     return const Scaffold(
       body: Center(child: Text("your splash screen")),
     );
   }
 
-  void _onAuthStateChange(BuildContext context, WidgetRef ref) {
+  Future<void> _onAuthStateChange(BuildContext context, WidgetRef ref) async {
+    final prefs = await SharedPreferences.getInstance();
+    // this data is saved in _LoginPage
+    final token = prefs.getString(PreferenceKey.token.name);
+    ref.watch(tokenProvider.state).state = token;
+
     Future.delayed(Duration(seconds: 1), () {
       FirebaseAuth.instance.authStateChanges().listen((user) async {
         try {
-          final prefs = await SharedPreferences.getInstance();
-          // this data is saved in _LoginPage
-          final token = prefs.getString(PreferenceKey.token.name);
-
           if (user == null || token == null) {
             navigatorKey.currentState?.pushReplacement(
               MaterialPageRoute(
