@@ -8,6 +8,7 @@ import 'package:flutter_samples/dropdown_sample.dart';
 import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
+import 'package:flutter_samples/google_auto_login.dart';
 import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/google_drive_search.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
@@ -21,6 +22,8 @@ import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
+
+final navigatorKey = new GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +43,7 @@ void main() async {
           "/transition": (context) => PageTransition(),
         },
         onGenerateRoute: generateRoute,
+        navigatorKey: navigatorKey,
       ),
     ),
   );
@@ -83,6 +87,7 @@ class MyApp extends StatelessWidget {
         _createButton(SwipeListItem()),
         _createButton(GoogleDriveTest()),
         _createButton(GoogleDriveSearch()),
+        _createButton(GoogleAutoLogin()),
         _createButton(MyTabbar()),
         _createButton(CrossAxisScroll()),
       ],
