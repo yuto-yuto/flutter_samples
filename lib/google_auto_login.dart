@@ -6,9 +6,27 @@ import 'package:flutter_samples/main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 enum PreferenceKey {
   token,
+}
+
+class _GoogleAuthClient extends http.BaseClient {
+  final Map<String, String> _headers;
+  final _client = new http.Client();
+
+  _GoogleAuthClient(this._headers);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    request.headers.addAll(_headers);
+    // try {
+    return _client.send(request);
+    // } catch (e) {
+    //   print(e);
+    // }
+  }
 }
 
 class GoogleAutoLogin extends StatelessWidget {
@@ -26,7 +44,7 @@ final apiProvider = StateProvider<DriveApi?>((ref) {
   }
 
   final headers = {"Authorization": "Bearer $token"};
-  return DriveApi(GoogleAuthClient(headers));
+  return DriveApi(_GoogleAuthClient(headers));
 });
 
 class SplashScreen extends ConsumerWidget {
@@ -42,15 +60,17 @@ class SplashScreen extends ConsumerWidget {
   }
 
   Future<void> _onAuthStateChange(BuildContext context, WidgetRef ref) async {
-    final prefs = await SharedPreferences.getInstance();
-    // this data is saved in _LoginPage
-    final token = prefs.getString(PreferenceKey.token.name);
-    ref.watch(tokenProvider.state).state = token;
+    // final prefs = await SharedPreferences.getInstance();
+    // // this data is saved in _LoginPage
+    // final token = prefs.getString(PreferenceKey.token.name);
+    // ref.watch(tokenProvider.state).state = token;
+
+    _autoLogin(ref);
 
     Future.delayed(Duration(seconds: 1), () {
       FirebaseAuth.instance.authStateChanges().listen((user) async {
         try {
-          if (user == null || token == null) {
+          if (user == null) {
             navigatorKey.currentState?.pushReplacement(
               MaterialPageRoute(
                 builder: (context) => _LoginPage(),
@@ -129,17 +149,31 @@ class _Home extends ConsumerWidget {
       return [];
     }
 
-    final fileList = await api.files.list(
-      spaces: 'appDataFolder',
-      $fields: 'files(name)',
-    );
-    return fileList.files ?? [];
+    try {
+      final fileList = await api.files.list(
+        spaces: 'appDataFolder',
+        $fields: 'files(name)',
+      );
+      return fileList.files ?? [];
+    } on DetailedApiRequestError catch (e) {
+      if (e.status == 401 && e.message == "Invalid Credentials") {
+        final googleUser = await _google.signInSilently();
+        if (googleUser == null) {
+          return [];
+        }
+        _afterLoginProcess(ref, googleUser);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return [];
   }
 }
 
 class _LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _autoLogin(ref);
     return Scaffold(
       appBar: AppBar(
         title: Text("Login page"),
@@ -164,29 +198,43 @@ class _LoginPage extends ConsumerWidget {
   Future<void> _login(WidgetRef ref) async {
     final googleUser = await _google.signIn();
 
+    if (googleUser == null) {
+      return;
+    }
+
     try {
-      if (googleUser != null) {
-        final googleAuth = await googleUser.authentication;
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // save the token
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(
-          PreferenceKey.token.name,
-          googleAuth.accessToken.toString(),
-        );
-
-        ref.read(tokenProvider.state).state = googleAuth.accessToken;
-
-        final UserCredential loginUser =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        assert(loginUser.user?.uid == FirebaseAuth.instance.currentUser?.uid);
-      }
+      _afterLoginProcess(ref, googleUser);
     } catch (e) {
       print(e);
     }
   }
+}
+
+Future<void> _autoLogin(WidgetRef ref) async {
+  final googleUser = await _google.signInSilently();
+  if (googleUser == null) {
+    return;
+  }
+  _afterLoginProcess(ref, googleUser);
+}
+
+Future<void> _afterLoginProcess(
+    WidgetRef ref, GoogleSignInAccount googleUser) async {
+  final googleAuth = await googleUser.authentication;
+  ref.read(tokenProvider.state).state = googleAuth.accessToken;
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+
+  // save the token
+  // final prefs = await SharedPreferences.getInstance();
+  // await prefs.setString(
+  //   PreferenceKey.token.name,
+  //   googleAuth.accessToken.toString(),
+  // );
+
+  final UserCredential loginUser =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+  assert(loginUser.user?.uid == FirebaseAuth.instance.currentUser?.uid);
 }
