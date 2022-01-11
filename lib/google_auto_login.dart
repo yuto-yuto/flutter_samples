@@ -1,16 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-enum PreferenceKey {
-  token,
-}
 
 class _GoogleAuthClient extends http.BaseClient {
   final Map<String, String> _headers;
@@ -60,11 +54,6 @@ class SplashScreen extends ConsumerWidget {
   }
 
   Future<void> _onAuthStateChange(BuildContext context, WidgetRef ref) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // // this data is saved in _LoginPage
-    // final token = prefs.getString(PreferenceKey.token.name);
-    // ref.watch(tokenProvider.state).state = token;
-
     _autoLogin(ref);
 
     Future.delayed(Duration(seconds: 1), () {
@@ -156,6 +145,7 @@ class _Home extends ConsumerWidget {
       );
       return fileList.files ?? [];
     } on DetailedApiRequestError catch (e) {
+      print(e);
       if (e.status == 401 && e.message == "Invalid Credentials") {
         final googleUser = await _google.signInSilently();
         if (googleUser == null) {
@@ -211,7 +201,7 @@ class _LoginPage extends ConsumerWidget {
 }
 
 Future<void> _autoLogin(WidgetRef ref) async {
-  final googleUser = await _google.signInSilently();
+  final googleUser = await _google.signInSilently(reAuthenticate: true);
   if (googleUser == null) {
     return;
   }
@@ -219,20 +209,15 @@ Future<void> _autoLogin(WidgetRef ref) async {
 }
 
 Future<void> _afterLoginProcess(
-    WidgetRef ref, GoogleSignInAccount googleUser) async {
+  WidgetRef ref,
+  GoogleSignInAccount googleUser,
+) async {
   final googleAuth = await googleUser.authentication;
   ref.read(tokenProvider.state).state = googleAuth.accessToken;
   final credential = GoogleAuthProvider.credential(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
   );
-
-  // save the token
-  // final prefs = await SharedPreferences.getInstance();
-  // await prefs.setString(
-  //   PreferenceKey.token.name,
-  //   googleAuth.accessToken.toString(),
-  // );
 
   final UserCredential loginUser =
       await FirebaseAuth.instance.signInWithCredential(credential);
