@@ -11,6 +11,7 @@ import 'package:flutter_samples/draggable_sample.dart';
 import 'package:flutter_samples/google_auto_login.dart';
 import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/google_drive_search.dart';
+import 'package:flutter_samples/graph.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/loading_next.dart';
 import 'package:flutter_samples/page_transition.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         _createButton(GoogleAutoLogin()),
         _createButton(MyTabbar()),
         _createButton(CrossAxisScroll()),
+        _createButton(Graph()),
       ],
     );
 
