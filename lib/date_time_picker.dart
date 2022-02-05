@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'time_of_day.dart';
 
 class DateTimePicker extends StatefulWidget {
   @override
@@ -105,7 +106,7 @@ class _DateTimePicker extends State<DateTimePicker> {
 
         if (selectedTime != null) {
           final text = alwaysUse24HourFormat
-              ? "${selectedTime.hour}:${selectedTime.minute}"
+              ? selectedTime.to24hours()
               : selectedTime.format(context);
           setState(() {
             controller.text = text;
