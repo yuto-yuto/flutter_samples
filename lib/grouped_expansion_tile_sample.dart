@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:grouped_expansion_tile/group_base.dart';
 import 'package:grouped_expansion_tile/grouped_expansion_tile.dart';
 
-class Category implements GroupBase {
-  final String uid;
+class Category extends GroupBase {
   final String name;
-  final String? parent;
   Category({
-    required this.uid,
+    required String uid,
     required this.name,
-    this.parent,
-  });
+    String? parent,
+  }) : super(uid: uid, parent: parent);
 }
 
 class GroupedExpansionTileSample extends StatelessWidget {
