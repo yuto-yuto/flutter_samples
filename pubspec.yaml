@@ -31,12 +31,12 @@ dependencies:
   provider: ^6.0.0
   flutter_riverpod: ^1.0.0
   intl: ^0.17.0
-  googleapis: ^7.0.0
+  googleapis: ^8.1.0
   google_sign_in: ^5.2.1
   firebase_auth:
   firebase_core:
   shared_preferences: ^2.0.11
-  fl_chart: ^0.41.0
+  fl_chart: ^0.50.6
 
 dev_dependencies:
   flutter_test:
