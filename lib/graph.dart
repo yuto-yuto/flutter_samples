@@ -101,29 +101,28 @@ class _Graph extends State<Graph> {
           LineChartBarData(
             spots: spots,
             dotData: FlDotData(show: false),
-            colors: const [Colors.blue],
+            color: Colors.blue,
           ),
           LineChartBarData(
             spots: spots2,
             dotData: FlDotData(show: false),
-            colors: const [Colors.red],
+            color: Colors.red,
           ),
         ],
         titlesData: FlTitlesData(
-          rightTitles: SideTitles(showTitles: false),
-          topTitles: SideTitles(showTitles: false),
-          bottomTitles: SideTitles(
-            reservedSize: 6,
-            getTextStyles: (context, xValue) => const TextStyle(
-              color: Colors.pink,
-              fontSize: 9,
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              reservedSize: 6,
+              getTitlesWidget: (double value, TitleMeta meta) => Text(
+                DateFormat.MMMd().format(_data[value.toInt()].date),
+                style: TextStyle(
+                  color: Colors.pink,
+                  fontSize: 9,
+                ),
+              ),
             ),
-            rotateAngle: 30,
-            showTitles: true,
-            getTitles: (xValue) {
-              final date = _data[xValue.toInt()].date;
-              return DateFormat.MMMd().format(date);
-            },
           ),
         ),
         clipData: FlClipData.all(),
