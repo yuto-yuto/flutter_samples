@@ -1,5 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+class DoubleTapTableRowData {
+  final String filepath;
+  final String dataType;
+  final String remark;
+
+  DoubleTapTableRowData({
+    required this.filepath,
+    required this.dataType,
+    required this.remark,
+  });
+
+  @override
+  bool operator ==(Object other) {
+    return other is DoubleTapTableRowData && other.hashCode == hashCode;
+  }
+
+  @override
+  int get hashCode => Object.hash(filepath, dataType, remark);
+}
+
+class _DoubleTapChecker<T> {
+  T? _lastSelectedItem;
+  DateTime _lastTimestamp = DateTime.now();
+
+  bool isDoubleTap(T item) {
+    if (_lastSelectedItem == null || _lastSelectedItem != item) {
+      _lastSelectedItem = item;
+      _lastTimestamp = DateTime.now();
+      return false;
+    }
+
+    final currentTimestamp = DateTime.now();
+    final duration = currentTimestamp.difference(_lastTimestamp).inMilliseconds;
+    _lastTimestamp = DateTime.now();
+    print(
+        "last: $_lastTimestamp, current: $currentTimestamp, duration: $duration");
+    return duration < 400;
+  }
+}
 
 class RowDoubleTap extends StatefulWidget {
   @override
@@ -7,8 +46,34 @@ class RowDoubleTap extends StatefulWidget {
 }
 
 class _RowDoubleTap extends State<RowDoubleTap> {
-  void alert() {
-    showAboutDialog(context: context);
+  List<DoubleTapTableRowData> data = [];
+  final doubleTapChecker = _DoubleTapChecker();
+  String doubleTapText = "double tap result here";
+
+  void _initializeData() {
+    data = [
+      DoubleTapTableRowData(
+        filepath: "/home/user/abc.txt",
+        dataType: "text",
+        remark: "abc text",
+      ),
+      DoubleTapTableRowData(
+        filepath: "/home/user/sound.wav",
+        dataType: "wav",
+        remark: "special sound",
+      ),
+      DoubleTapTableRowData(
+        filepath: "/home/user/secret",
+        dataType: "text",
+        remark: "secret into",
+      ),
+    ];
+  }
+
+  @override
+  void initState() {
+    _initializeData();
+    super.initState();
   }
 
   @override
@@ -18,29 +83,37 @@ class _RowDoubleTap extends State<RowDoubleTap> {
         title: Text("Row Double Tap"),
       ),
       body: Center(
-        child: DataTable(
-          columns: [
-            DataColumn(label: Text('Col 1')),
-            DataColumn(label: Text('Col 2')),
-          ],
-          rows: [
-            DataRow(
-              onSelectChanged: (bool? selected) {
-                alert();
-              },
-              cells: [
-                DataCell(
-                  TableRowInkWell(
-                    child: Container(color: Colors.red, child: Text('Val 1')),
-                  ),
-                  // onTap: alert,
-                ),
-                DataCell(TableRowInkWell(
-                  child: Container(color: Colors.red, child: Text('Val 2')),
-                  // onTap: alert,
-                )),
+        child: Column(
+          children: [
+            DataTable(
+              showCheckboxColumn: false,
+              columns: [
+                DataColumn(label: Text('Filepath')),
+                DataColumn(label: Text('Data type')),
+                DataColumn(label: Text('Remark')),
               ],
-            )
+              rows: data
+                  .map(
+                    (e) => DataRow(
+                      onSelectChanged: ((selected) {
+                        setState(() {
+                          if (doubleTapChecker.isDoubleTap(e)) {
+                            doubleTapText = "Double tapped ${e.filepath}";
+                            return;
+                          }
+                          doubleTapText = "Single tap ${e.filepath}";
+                        });
+                      }),
+                      cells: [
+                        DataCell(Text(e.filepath)),
+                        DataCell(Text(e.dataType)),
+                        DataCell(Text(e.remark)),
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
+            Text(doubleTapText),
           ],
         ),
       ),
