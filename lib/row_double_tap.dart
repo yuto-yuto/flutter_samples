@@ -47,7 +47,7 @@ class RowDoubleTap extends StatefulWidget {
 
 class _RowDoubleTap extends State<RowDoubleTap> {
   List<DoubleTapTableRowData> data = [];
-  final doubleTapChecker = _DoubleTapChecker();
+  final doubleTapChecker = _DoubleTapChecker<DoubleTapTableRowData>();
   String doubleTapText = "double tap result here";
 
   void _initializeData() {
@@ -85,38 +85,46 @@ class _RowDoubleTap extends State<RowDoubleTap> {
       body: Center(
         child: Column(
           children: [
-            DataTable(
-              showCheckboxColumn: false,
-              columns: [
-                DataColumn(label: Text('Filepath')),
-                DataColumn(label: Text('Data type')),
-                DataColumn(label: Text('Remark')),
-              ],
-              rows: data
-                  .map(
-                    (e) => DataRow(
-                      onSelectChanged: ((selected) {
-                        setState(() {
-                          if (doubleTapChecker.isDoubleTap(e)) {
-                            doubleTapText = "Double tapped ${e.filepath}";
-                            return;
-                          }
-                          doubleTapText = "Single tap ${e.filepath}";
-                        });
-                      }),
-                      cells: [
-                        DataCell(Text(e.filepath)),
-                        DataCell(Text(e.dataType)),
-                        DataCell(Text(e.remark)),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
+            _doubleTapRow(),
             Text(doubleTapText),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _doubleTapRow() {
+    return DataTable(
+      showCheckboxColumn: false,
+      columns: [
+        DataColumn(label: Text('Filepath')),
+        DataColumn(label: Text('Data type')),
+        DataColumn(label: Text('Remark')),
+      ],
+      rows: data
+          .map(
+            (e) => DataRow(
+              onSelectChanged: ((selected) {
+                setState(() {
+                  if (doubleTapChecker.isDoubleTap(e)) {
+                    doubleTapText = "Double tapped ${e.filepath}";
+                    return;
+                  }
+                  doubleTapText = "Single tap ${e.filepath}";
+                });
+              }),
+              cells: [
+                DataCell(Text(e.filepath)),
+                DataCell(Text(e.dataType)),
+                DataCell(
+                  Text(e.remark),
+                  onTap: () => setState(
+                      () => doubleTapText = "onTap event for ${e.filepath}"),
+                ),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 }
