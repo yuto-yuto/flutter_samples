@@ -26,6 +26,7 @@ import 'package:flutter_samples/row_double_tap.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
+import 'package:flutter_samples/table_column_resize.dart';
 import 'package:flutter_samples/time_of_day.dart';
 
 final navigatorKey = new GlobalKey<NavigatorState>();
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
         _createButton(TimeOfDaySample()),
         _createButton(DateTimePicker()),
         _createButton(RowDoubleTap()),
+        _createButton(TableColumnResize()),
       ],
     );
 
