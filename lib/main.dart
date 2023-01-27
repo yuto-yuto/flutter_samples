@@ -24,6 +24,7 @@ import 'package:flutter_samples/riverpod/riverpod-with-visibility.dart';
 import 'package:flutter_samples/riverpod/riverpod_with_list.dart';
 import 'package:flutter_samples/row_double_tap.dart';
 import 'package:flutter_samples/scrollable_draggable.dart';
+import 'package:flutter_samples/specify_area_on_slider.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
 import 'package:flutter_samples/table_column_resize.dart';
@@ -102,6 +103,7 @@ class MyApp extends StatelessWidget {
         _createButton(DateTimePicker()),
         _createButton(RowDoubleTap()),
         _createButton(TableColumnResize()),
+        _createButton(SpecifyAreaOnSlider()),
       ],
     );
 
