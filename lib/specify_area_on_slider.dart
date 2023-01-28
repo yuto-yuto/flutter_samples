@@ -54,12 +54,13 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
                 setState(() {
                   startRelativePosition = null;
                   leftGlobalX = null;
+                  selectedAreaWidth = null;
                 });
               } else {
                 setState(() {
                   startRelativePosition = sliderPosition;
                   leftGlobalX = sliderWidth * sliderPosition;
-                  selectedAreaWidth = null;
+                  selectedAreaWidth = sliderWidth * (1 - sliderPosition);
                 });
               }
               return;
@@ -68,7 +69,7 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
             if (endRelativePosition! <= sliderPosition) {
               if (startRelativePosition != null) {
                 setState(() {
-                  startRelativePosition == null;
+                  startRelativePosition = null;
                   leftGlobalX = null;
                   selectedAreaWidth = rightGlobalX!;
                 });
@@ -77,7 +78,11 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
             }
 
             if (startRelativePosition == sliderPosition) {
-              setState(() => startRelativePosition = null);
+              setState(() {
+                startRelativePosition = null;
+                leftGlobalX = null;
+                selectedAreaWidth = rightGlobalX;
+              });
               return;
             }
 
@@ -97,7 +102,8 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
               setState(() {
                 if (endRelativePosition == sliderPosition) {
                   endRelativePosition = null;
-                  selectedAreaWidth = 0;
+                  rightGlobalX = null;
+                  selectedAreaWidth = null;
                 } else {
                   endRelativePosition = sliderPosition;
                   rightGlobalX = sliderWidth * sliderPosition;
@@ -119,7 +125,11 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
             }
 
             if (endRelativePosition == sliderPosition) {
-              setState(() => endRelativePosition = null);
+              setState(() {
+                endRelativePosition = null;
+                rightGlobalX = null;
+                selectedAreaWidth = sliderWidth * (1 - startRelativePosition!);
+              });
               return;
             }
             if (startRelativePosition! < sliderPosition) {
