@@ -10,6 +10,7 @@ import 'package:flutter_samples/dropdown_sample.dart';
 import 'package:flutter_samples/dynamic_text_field.dart';
 import 'package:flutter_samples/ScaffoldFooterView.dart';
 import 'package:flutter_samples/draggable_sample.dart';
+import 'package:flutter_samples/get_widget_info.dart';
 import 'package:flutter_samples/google_auto_login.dart';
 import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/google_drive_search.dart';
@@ -104,6 +105,7 @@ class MyApp extends StatelessWidget {
         _createButton(RowDoubleTap()),
         _createButton(TableColumnResize()),
         _createButton(SpecifyAreaOnSlider()),
+        _createButton(GetWidgetInfo()),
       ],
     );
 
