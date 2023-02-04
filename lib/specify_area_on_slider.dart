@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final trackHeight = sliderTheme.trackHeight;
+    final trackLeft = offset.dx + 100;
+    final trackTop = offset.dy + (parentBox.size.height - trackHeight!) / 2;
+    final trackWidth = parentBox.size.width - 100 * 2;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+}
+
 class SpecifyAreaOnSlider extends StatefulWidget {
   const SpecifyAreaOnSlider({Key? key}) : super(key: key);
 
@@ -12,14 +29,34 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
   double sliderPosition = 0;
   double? startRelativePosition;
   double? endRelativePosition;
-  double? leftGlobalX;
-  double? rightGlobalX;
+  double? _leftGlobalX;
+  double? _rightGlobalX;
   double? selectedAreaWidth;
 
   double get sliderWidth {
     final renderBox = keyForSlider.currentContext?.findRenderObject() as RenderBox;
-    return renderBox.size.width;
+    return renderBox.size.width - (14 + 8) * 2;
   }
+
+  void set leftGlobalX(double? value) {
+    if (value != null) {
+      _leftGlobalX = value + 22;
+    } else {
+      _leftGlobalX = null;
+    }
+  }
+
+  double? get leftGlobalX => _leftGlobalX;
+
+  void set rightGlobalX(double? value) {
+    if (value != null) {
+      _rightGlobalX = value + 22;
+    } else {
+      _rightGlobalX = null;
+    }
+  }
+
+  double? get rightGlobalX => _rightGlobalX;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +68,13 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
         });
       },
       value: sliderPosition,
+    );
+    final sliderTheme = SliderTheme(
+      data: SliderThemeData(
+        overlayShape: SliderComponentShape.noThumb,
+        trackShape: CustomTrackShape(),
+      ),
+      child: slider,
     );
 
     final buttons = Row(
@@ -149,6 +193,7 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
           ),
         ),
         slider,
+        // sliderTheme,
       ],
     );
 
