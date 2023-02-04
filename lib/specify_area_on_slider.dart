@@ -24,7 +24,7 @@ class SpecifyAreaOnSlider extends StatefulWidget {
   _SpecifyAreaOnSliderState createState() => _SpecifyAreaOnSliderState();
 }
 
-class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
+class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> with WidgetsBindingObserver {
   final keyForSlider = GlobalKey();
   double sliderPosition = 0;
   double? startRelativePosition;
@@ -57,6 +57,39 @@ class _SpecifyAreaOnSliderState extends State<SpecifyAreaOnSlider> {
   }
 
   double? get rightGlobalX => _rightGlobalX;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    if (_leftGlobalX != null && _rightGlobalX == null) {
+      setState(() {
+        leftGlobalX = startRelativePosition! * sliderWidth;
+        selectedAreaWidth = sliderWidth * (1 - startRelativePosition!);
+      });
+    } else if (_leftGlobalX == null && _rightGlobalX != null) {
+      setState(() {
+        rightGlobalX = endRelativePosition! * sliderWidth;
+        selectedAreaWidth = _rightGlobalX!;
+      });
+    } else if (_leftGlobalX != null && _rightGlobalX != null) {
+      setState(() {
+        leftGlobalX = startRelativePosition! * sliderWidth;
+        rightGlobalX = endRelativePosition! * sliderWidth;
+        selectedAreaWidth = _rightGlobalX! - leftGlobalX!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
