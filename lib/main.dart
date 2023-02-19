@@ -30,6 +30,7 @@ import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
 import 'package:flutter_samples/table_column_resize.dart';
 import 'package:flutter_samples/time_of_day.dart';
+import 'package:flutter_samples/key_detection_on_table.dart';
 
 final navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -106,6 +107,7 @@ class MyApp extends StatelessWidget {
         _createButton(TableColumnResize()),
         _createButton(SpecifyAreaOnSlider()),
         _createButton(GetWidgetInfo()),
+        _createButton(KeyDetectionOnTable()),
       ],
     );
 
