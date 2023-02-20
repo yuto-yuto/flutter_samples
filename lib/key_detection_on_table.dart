@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'common.dart';
+import 'key_listener_with_check_box.dart';
 
 class KeyDetectionOnTable extends StatefulWidget {
   const KeyDetectionOnTable({Key? key}) : super(key: key);
@@ -7,70 +9,101 @@ class KeyDetectionOnTable extends StatefulWidget {
   _KeyDetectionOnTableState createState() => _KeyDetectionOnTableState();
 }
 
+class MyRowDataClass {
+  bool selected = false;
+  String text1;
+  String text2;
+  String text3;
+  MyRowDataClass({
+    required this.text1,
+    required this.text2,
+    required this.text3,
+  });
+}
+
 class _KeyDetectionOnTableState extends State<KeyDetectionOnTable> {
-  final focusNodeForCheckBox = FocusNode();
-  final controller = TextEditingController();
-  bool isChecked = false;
+  final focusNodeForDataTable = FocusNode();
   String text = "";
+  final columnCount = 3;
+  final rowCount = 10;
+  List<MyRowDataClass> data = [];
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    data = List.generate(
+      rowCount,
+      (index) => MyRowDataClass(text1: "$index-1", text2: "$index-2", text3: "$index-3"),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Key Detection On Data Table"),
-        ),
-        body: Column(children: [
-          _generateListenerAndCheckBox(),
-        ]),
-      ),
-    );
-  }
-
-  Widget _generateListenerAndCheckBox() {
-    final checkBoxAndListener = _generateContainer(
       child: KeyboardListener(
-        focusNode: focusNodeForCheckBox,
-        onKeyEvent: (event) {
-          // debugPrint(event.toString());
-          setState(() {
-            text = event.logicalKey.keyLabel;
-          });
+        autofocus: true,
+        focusNode: focusNodeForDataTable,
+        onKeyEvent: (value) {
+          debugPrint("Key: ${value.logicalKey.keyLabel}");
+          if (value.logicalKey.keyLabel == "Delete") {
+            setState(() {
+              text = value.logicalKey.keyLabel;
+              data.removeWhere((element) => element.selected);
+            });
+          } else {
+            setState(() {
+              text = value.logicalKey.keyLabel;
+            });
+          }
         },
-        child: Checkbox(
-          value: isChecked,
-          onChanged: (value) {
-            setState(() => isChecked = !focusNodeForCheckBox.hasFocus);
-            if (!focusNodeForCheckBox.hasFocus) {
-              focusNodeForCheckBox.requestFocus();
-            } else {
-              focusNodeForCheckBox.nextFocus();
-            }
-          },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Key Detection On Data Table"),
+          ),
+          body: SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            child: Column(children: [
+              createButtonForPage(context, KeyListenerWithCheckBox()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _generateDataTable(),
+                  generateContainer(child: Center(child: Text(text))),
+                ],
+              ),
+            ]),
+          ),
         ),
       ),
-    );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        checkBoxAndListener,
-        _generateContainer(
-          child: Text(text),
-        ),
-      ],
     );
   }
 
-  Widget _generateContainer({required Widget child}) {
-    return Container(
-      height: 100,
-      width: 200,
-      child: child,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 3),
-        color: Colors.blue.shade50,
+  Widget _generateDataTable() {
+    return DataTable(
+      showCheckboxColumn: true,
+      columns: List.generate(
+        columnCount,
+        (index) => DataColumn(label: Text("Column-$index")),
       ),
+      rows: data.map((row) => _generateDataRow(row)).toList(),
+    );
+  }
+
+  DataRow _generateDataRow(MyRowDataClass row) {
+    return DataRow(
+      selected: row.selected,
+      cells: [
+        DataCell(Text(row.text1)),
+        DataCell(Text(row.text2)),
+        DataCell(Text(row.text3)),
+      ],
+      onSelectChanged: (value) {
+        setState(() {
+          row.selected = value ?? false;
+        });
+      },
     );
   }
 }
