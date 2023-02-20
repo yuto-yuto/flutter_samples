@@ -35,10 +35,7 @@ class _Product {
 
   @override
   bool operator ==(Object other) {
-    switch (type) {
-      default:
-        return other is _Product && other.hashCode == hashCode;
-    }
+    return other is _Product && other.hashCode == hashCode;
   }
 
   @override
@@ -54,24 +51,23 @@ void _distinct() {
   }
 
   {
-    final result =
-        list.whereWithIndex((element, index) => list.indexOf(element) == index);
+    final result = list.whereWithIndex((element, index) => list.indexOf(element) == index);
     print(result); // [1, 2, 3, 4, 5]
   }
 
-final products = [
-  _Product(name: "USB", type: "A", price: 10),
-  _Product(name: "USB", type: "A", price: 10),
-  _Product(name: "USB", type: "B", price: 12),
-  _Product(name: "USB", type: "C", price: 11),
-  _Product(name: "Mouse", type: "A", price: 10),
-  _Product(name: "Mouse", type: "B", price: 12),
-  _Product(name: "Mouse", type: "B", price: 12),
-  _Product(name: "Mouse", type: "C", price: 10),
-  _Product(name: "Laptop", type: "A", price: 100),
-  _Product(name: "Laptop", type: "B", price: 120),
-  _Product(name: "Laptop", type: "B", price: 120),
-];
+  final products = [
+    _Product(name: "USB", type: "A", price: 10),
+    _Product(name: "USB", type: "A", price: 10),
+    _Product(name: "USB", type: "B", price: 12),
+    _Product(name: "USB", type: "C", price: 11),
+    _Product(name: "Mouse", type: "A", price: 10),
+    _Product(name: "Mouse", type: "B", price: 12),
+    _Product(name: "Mouse", type: "B", price: 12),
+    _Product(name: "Mouse", type: "C", price: 10),
+    _Product(name: "Laptop", type: "A", price: 100),
+    _Product(name: "Laptop", type: "B", price: 120),
+    _Product(name: "Laptop", type: "B", price: 120),
+  ];
 
   {
     print("Hashcode >>>");
@@ -109,9 +105,7 @@ final products = [
   {
     print("--- name ---");
     final result = products
-        .whereWithIndex((element, index) =>
-            products.indexWhere((element2) => element2.name == element.name) ==
-            index)
+        .whereWithIndex((element, index) => products.indexWhere((element2) => element2.name == element.name) == index)
         .toList();
     result.forEach((element) => print(element.toJson()));
     // { name: USB, type: A, price: 10}
@@ -123,10 +117,7 @@ final products = [
     print("--- name and type---");
     final result = products
         .whereWithIndex((element, index) =>
-            products.indexWhere((element2) =>
-                element2.name == element.name &&
-                element2.type == element.type) ==
-            index)
+            products.indexWhere((element2) => element2.name == element.name && element2.type == element.type) == index)
         .toList();
     result.forEach((element) => print(element.toJson()));
     // { name: USB, type: A, price: 10}
