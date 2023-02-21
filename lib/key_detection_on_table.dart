@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'common.dart';
 import 'key_listener_with_check_box.dart';
+import 'package:flutter/services.dart';
 
 class KeyDetectionOnTable extends StatefulWidget {
   const KeyDetectionOnTable({Key? key}) : super(key: key);
@@ -46,7 +47,8 @@ class _KeyDetectionOnTableState extends State<KeyDetectionOnTable> {
         focusNode: focusNodeForDataTable,
         onKeyEvent: (value) {
           debugPrint("Key: ${value.logicalKey.keyLabel}");
-          if (value.logicalKey.keyLabel == "Delete") {
+          
+          if (value.logicalKey == LogicalKeyboardKey.delete) {
             setState(() {
               text = value.logicalKey.keyLabel;
               data.removeWhere((element) => element.selected);
