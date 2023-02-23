@@ -31,6 +31,7 @@ import 'package:flutter_samples/tabbar.dart';
 import 'package:flutter_samples/table_column_resize.dart';
 import 'package:flutter_samples/time_of_day.dart';
 import 'package:flutter_samples/key_detection_on_table.dart';
+import 'package:flutter_samples/select_row_with_shift_key.dart';
 
 final navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -108,6 +109,7 @@ class MyApp extends StatelessWidget {
         _createButton(SpecifyAreaOnSlider()),
         _createButton(GetWidgetInfo()),
         _createButton(KeyDetectionOnTable()),
+        _createButton(SelectRowWithShiftKey()),
       ],
     );
 
