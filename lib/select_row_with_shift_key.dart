@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'common.dart';
 import 'package:flutter/services.dart';
@@ -48,15 +50,11 @@ class _SelectRowWithShiftKeyState extends State<SelectRowWithShiftKey> {
         autofocus: true,
         focusNode: focusNodeForDataTable,
         onKeyEvent: (value) {
-          debugPrint("Key: ${value.logicalKey.keyLabel}");
+          debugPrint("Key: ${value.logicalKey.keyLabel}, state ${value.runtimeType.toString()}");
           if (value.logicalKey == LogicalKeyboardKey.controlLeft ||
               value.logicalKey == LogicalKeyboardKey.controlRight) {
             setState(() {
-              isControlPressed = value is KeyDownEvent
-                  ? true
-                  : value is KeyUpEvent
-                      ? false
-                      : isControlPressed;
+              isControlPressed = value is KeyDownEvent ? true : false;
               text = "Control key ${isControlPressed ? "ON" : "OFF"}";
             });
           } else if (value.logicalKey == LogicalKeyboardKey.shiftLeft ||
@@ -67,7 +65,7 @@ class _SelectRowWithShiftKeyState extends State<SelectRowWithShiftKey> {
                   : value is KeyUpEvent
                       ? false
                       : isShiftPressed;
-              text = "Control key ${isShiftPressed ? "ON" : "OFF"}";
+              text = "Shift key ${isShiftPressed ? "ON" : "OFF"}";
             });
           }
         },
@@ -130,18 +128,12 @@ class _SelectRowWithShiftKeyState extends State<SelectRowWithShiftKey> {
             setState(() {
               row.selected = value ?? false;
             });
-          } else if (lastSelectedRowIndex! > currentIndex) {
-            final selectedIndexes =
-                List.generate(lastSelectedRowIndex! - currentIndex + 1, (index) => index + currentIndex);
-            setState(() {
-              for (int i = 0; i < data.length; i++) {
-                data[i].selected = selectedIndexes.contains(i) ? true : false;
-              }
-            });
-            return;
-          } else if (lastSelectedRowIndex! < currentIndex) {
-            final selectedIndexes =
-                List.generate(currentIndex - lastSelectedRowIndex! + 1, (index) => index + lastSelectedRowIndex!);
+          } else {
+            final diff = lastSelectedRowIndex! - currentIndex;
+            final selectedIndexes = List.generate(
+              diff.abs() + 1,
+              (index) => index + min(lastSelectedRowIndex!, currentIndex),
+            );
             setState(() {
               for (int i = 0; i < data.length; i++) {
                 data[i].selected = selectedIndexes.contains(i) ? true : false;
