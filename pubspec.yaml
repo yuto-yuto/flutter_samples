@@ -37,6 +37,7 @@ dependencies:
   firebase_core:
   shared_preferences: ^2.0.11
   fl_chart: ^0.50.6
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

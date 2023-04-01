@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -47,9 +48,7 @@ class ComparedClass {
   bool operator ==(Object other) {
     switch (type) {
       case 2:
-        return other is ComparedClass &&
-            runtimeType == other.runtimeType &&
-            uid == other.uid;
+        return other is ComparedClass && runtimeType == other.runtimeType && uid == other.uid;
       case 3:
         return other is ComparedClass &&
             runtimeType == other.runtimeType &&
@@ -77,5 +76,16 @@ class ComparedClass {
   }
 
   @override
-  int get hashCode => hashValues(hashList(texts), uid, type);
+  int get hashCode => Object.hash(Object.hashAll(texts), uid, type);
+}
+
+class MyClass3 extends Equatable {
+  final int id;
+  final int age;
+  final String name;
+
+  MyClass3(this.id, this.age, this.name);
+
+  @override
+  List<Object?> get props => [id, name];
 }

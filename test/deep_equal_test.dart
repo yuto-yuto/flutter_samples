@@ -1,4 +1,4 @@
-import 'package:flutter_samples/deep_equal.dart';
+import 'package:flutter_samples/dart/deep_equal.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class ExtendedClass extends ComparedClass {
@@ -138,6 +138,21 @@ void main() {
         expect(obj1 == obj2, false);
         expect(obj2 == obj1, false);
       });
+    });
+  });
+
+  group("MyClass3", () {
+    test('should return true if id and name are identical', () {
+      final obj1 = MyClass3(1, 22, "kevin");
+      final obj2 = MyClass3(1, 52, "kevin");
+      expect(obj1 == obj2, true);
+      expect(obj2 == obj1, true);
+    });
+    test('should return false if name is identical but id is different', () {
+      final obj1 = MyClass3(1, 22, "kevin");
+      final obj2 = MyClass3(2, 22, "kevin");
+      expect(obj1 == obj2, false);
+      expect(obj2 == obj1, false);
     });
   });
 }
