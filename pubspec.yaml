@@ -40,6 +40,7 @@ dependencies:
   equatable: ^2.0.5
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
+  flutter_bloc: ^8.1.2
 
 dev_dependencies:
   build_runner: ^2.3.3
@@ -61,7 +62,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/resources/logo_1200_630.jpg
+    - lib/resources/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
