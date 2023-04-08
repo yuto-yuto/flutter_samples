@@ -4,16 +4,16 @@ import 'package:flutter_samples/bloc_pattern/site_data/site_data_cubit.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_state.dart';
 import 'package:flutter_samples/custom_widgets/labeled_divider.dart';
 
-class BlocAppView1 extends StatefulWidget {
+class BlocAppView2 extends StatefulWidget {
   final String title;
   final Color color;
-  const BlocAppView1({Key? key, required this.title, required this.color}) : super(key: key);
+  const BlocAppView2({Key? key, required this.title, required this.color}) : super(key: key);
 
   @override
-  _BlocAppView1State createState() => _BlocAppView1State();
+  _BlocAppView2State createState() => _BlocAppView2State();
 }
 
-class _BlocAppView1State extends State<BlocAppView1> {
+class _BlocAppView2State extends State<BlocAppView2> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,23 +23,8 @@ class _BlocAppView1State extends State<BlocAppView1> {
           title: Text("Bloc pattern test: ${widget.title}"),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/home'),
-                  child: Text("Go to Home"),
-                  style: ElevatedButton.styleFrom(minimumSize: Size(100, 50)),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/second'),
-                  child: Text("Go to Second"),
-                  style: ElevatedButton.styleFrom(minimumSize: Size(100, 50)),
-                ),
-              ],
-            ),
             LabeledDivider("technicalfeeder.com"),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
