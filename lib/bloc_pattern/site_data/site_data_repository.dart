@@ -1,6 +1,6 @@
 import 'package:path/path.dart' as p;
-import 'package:flutter_samples/bloc_pattern/models/site_data.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_reader.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_reader.dart';
 
 class SiteDataRepository {
   final SiteDataReader reader;

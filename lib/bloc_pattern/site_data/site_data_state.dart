@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_samples/bloc_pattern/models/site_data.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data.dart';
 
 enum SiteDataStatus {
   initial,

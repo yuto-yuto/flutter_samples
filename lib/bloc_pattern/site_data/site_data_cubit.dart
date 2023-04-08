@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_repository.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_state.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_repository.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_state.dart';
 
 abstract class SiteDataCubit extends Cubit<SiteDataState> {
   final SiteDataRepository _repo;

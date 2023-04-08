@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_cubit.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_reader.dart';
-import 'package:flutter_samples/bloc_pattern/site_data_repository.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_cubit.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_reader.dart';
+import 'package:flutter_samples/bloc_pattern/site_data/site_data_repository.dart';
 import 'package:flutter_samples/bloc_pattern/presentation/BlocAppView1.dart';
 import 'package:flutter_samples/bloc_pattern/constants.dart';
 
