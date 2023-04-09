@@ -23,7 +23,7 @@ class _BlocAppView2State extends State<BlocAppView2> {
           title: Text("Bloc pattern test: ${widget.title}"),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             LabeledDivider("technicalfeeder.com"),
             Row(

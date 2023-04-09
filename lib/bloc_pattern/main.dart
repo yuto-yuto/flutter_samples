@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_api.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_bloc.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_repository.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_cubit.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_reader.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_repository.dart';
@@ -17,6 +20,9 @@ class BlocPattern extends StatelessWidget {
         providers: [
           RepositoryProvider(
             create: (context) => SiteDataRepository(reader: SiteDataReader()),
+          ),
+          RepositoryProvider(
+            create: (context) => SearchRepository(reader: SearchAPI()),
           ),
         ],
         child: MultiBlocProvider(
@@ -49,6 +55,11 @@ class BlocPattern extends StatelessWidget {
               create: (context) => UnknownSiteCubit(
                 RepositoryProvider.of<SiteDataRepository>(context),
                 filename: FILENAME_UNKNOWN,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => SearchBloc(
+                context.read<SearchRepository>(),
               ),
             ),
           ],

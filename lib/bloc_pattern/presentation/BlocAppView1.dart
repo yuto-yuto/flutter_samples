@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_bloc.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_event.dart';
+import 'package:flutter_samples/bloc_pattern/search/search_state.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_cubit.dart';
 import 'package:flutter_samples/bloc_pattern/site_data/site_data_state.dart';
 import 'package:flutter_samples/custom_widgets/labeled_divider.dart';
@@ -14,6 +17,24 @@ class BlocAppView1 extends StatefulWidget {
 }
 
 class _BlocAppView1State extends State<BlocAppView1> {
+  final _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textController.addListener(() {
+      final searchBloc = context.read<SearchBloc>();
+      searchBloc.add(SearchQueryEvent(query: _textController.text));
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,46 +62,89 @@ class _BlocAppView1State extends State<BlocAppView1> {
               ],
             ),
             LabeledDivider("technicalfeeder.com"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<TechnicalFeederCubit>(context).read();
-                  },
-                  child: Text("Successful Trigger"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<TechnicalFeederCubit>(context).read(isFail: true);
-                  },
-                  child: Text("Failing Trigger"),
-                ),
-                generateResultDisplayArea<TechnicalFeederCubit>(),
-              ],
-            ),
+            generateCubitSet<TechnicalFeederCubit>(),
             LabeledDivider("example.com"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<UnknownSiteCubit>(context).read();
-                  },
-                  child: Text("Successful Trigger"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<UnknownSiteCubit>(context).read(isFail: true);
-                  },
-                  child: Text("Failing Trigger"),
-                ),
-                generateResultDisplayArea<UnknownSiteCubit>(),
-              ],
-            ),
+            generateCubitSet<UnknownSiteCubit>(),
+            LabeledDivider("Input Search Query"),
+            generateSearchBox(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget generateSearchBox() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+          child: TextField(
+            controller: _textController,
+          ),
+          width: 100,
+          height: 50,
+        ),
+        Container(
+          child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              if (state is SearchStateEmpty) {
+                return SizedBox.shrink();
+              }
+              if (state is SearchStateInProgress) {
+                if (state.cache == null) {
+                  return SizedBox.shrink();
+                } else {
+                  return Text(state.cache.toString());
+                }
+              }
+              if (state is SearchStateCompleted) {
+                return Text(state.data.toString());
+              }
+              if (state is SearchStateError) {
+                return Text(state.error);
+              }
+              return Text("input your query");
+            },
+          ),
+          height: 100,
+          width: 200,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+        ),
+        Container(
+          child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) => Text(state.toString()),
+          ),
+          height: 100,
+          width: 200,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget generateCubitSet<T extends SiteDataCubit>() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            // Same as "BlocProvider.of<T>(context).read();"
+            context.read<T>().read();
+          },
+          child: Text("Successful Trigger"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            BlocProvider.of<T>(context).read(isFail: true);
+          },
+          child: Text("Failing Trigger"),
+        ),
+        generateResultDisplayArea<T>(),
+      ],
     );
   }
 
