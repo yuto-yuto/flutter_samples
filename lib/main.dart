@@ -37,8 +37,8 @@ import 'package:flutter_samples/bloc_pattern/main.dart';
 final navigatorKey = new GlobalKey<NavigatorState>();
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   runApp(
     ProviderScope(
