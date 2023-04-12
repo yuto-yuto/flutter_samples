@@ -31,7 +31,7 @@ class BlocPattern extends StatelessWidget {
               switch (settings.name) {
                 case "/":
                   return MaterialPageRoute(
-                    builder: (_) => BlocAppView1(title: "first", color: Colors.yellow),
+                    builder: (_) => BlocAppView1(title: "first", color: Colors.pink),
                   );
                 case "/second":
                   return MaterialPageRoute(
