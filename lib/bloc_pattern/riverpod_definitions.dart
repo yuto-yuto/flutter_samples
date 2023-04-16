@@ -52,7 +52,7 @@ final searchProvider3 = StateNotifierProvider<SearchRiverpodNotifier, SearchStat
   return SearchRiverpodNotifier(repository);
 });
 
-final queryControllerProvider = Provider.autoDispose<TextEditingController>((ref) {
+final queryControllerProvider = Provider<TextEditingController>((ref) {
   final searchApi = ref.read(searchProvider3.notifier);
   final controller = TextEditingController();
   final debouncer = Debouncer(duration: Duration(milliseconds: 500));
