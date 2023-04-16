@@ -7,7 +7,7 @@ class SiteDataRiverpodNotifier extends StateNotifier<SiteDataState> {
   final SiteDataRepository _repo;
   SiteDataRiverpodNotifier(this._repo) : super(SiteDataState(status: SiteDataStatus.initial));
 
-  void read({required String filename, bool isFail = false}) async {
+  Future<void> read({required String filename, bool isFail = false}) async {
     state = SiteDataState(status: SiteDataStatus.loading);
 
     await Future.delayed(Duration(seconds: 1));
@@ -21,7 +21,7 @@ class SiteDataRiverpodNotifier extends StateNotifier<SiteDataState> {
       state = SiteDataState(status: SiteDataStatus.success, siteData: result);
     } catch (e) {
       print(e);
-      state = state = SiteDataState(status: SiteDataStatus.failure);
+      state = SiteDataState(status: SiteDataStatus.failure);
     }
   }
 }

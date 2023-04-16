@@ -33,12 +33,13 @@ import 'package:flutter_samples/time_of_day.dart';
 import 'package:flutter_samples/key_detection_on_table.dart';
 import 'package:flutter_samples/select_row_with_shift_key.dart';
 import 'package:flutter_samples/bloc_pattern/main.dart';
+import 'package:flutter_samples/bloc_pattern/riverpod_main.dart';
 
 final navigatorKey = new GlobalKey<NavigatorState>();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
 
   runApp(
     ProviderScope(
@@ -111,6 +112,7 @@ class MyApp extends StatelessWidget {
       KeyDetectionOnTable(),
       SelectRowWithShiftKey(),
       BlocPattern(),
+      RiverpodPattern(),
     ];
     viewList.sort((a, b) => a.runtimeType.toString().compareTo(b.runtimeType.toString()));
     final listView = ListView(children: viewList.map((e) => _createButton(e)).toList());
