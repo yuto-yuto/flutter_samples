@@ -13,7 +13,7 @@ void main() {
   disp(() => int.parse(str3));
   disp(() => int.parse(str3, radix: 36)); // 29694491
 
-  print(int.parse("hoge", onError: (_) => 0)); // 0
+  // print(int.parse("hoge", onError: (_) => 0)); // 0
   print(int.tryParse("hoge") ?? 0);
   
 }

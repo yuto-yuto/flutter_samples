@@ -34,6 +34,7 @@ import 'package:flutter_samples/key_detection_on_table.dart';
 import 'package:flutter_samples/select_row_with_shift_key.dart';
 import 'package:flutter_samples/bloc_pattern/main.dart';
 import 'package:flutter_samples/bloc_pattern/riverpod_main.dart';
+import 'package:flutter_samples/toggle_sample.dart';
 
 final navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -113,6 +114,7 @@ class MyApp extends StatelessWidget {
       SelectRowWithShiftKey(),
       BlocPattern(),
       RiverpodPattern(),
+      ToggleSample(),
     ];
     viewList.sort((a, b) => a.runtimeType.toString().compareTo(b.runtimeType.toString()));
     final listView = ListView(children: viewList.map((e) => _createButton(e)).toList());
