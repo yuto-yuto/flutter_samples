@@ -29,6 +29,7 @@ import 'package:flutter_samples/specify_area_on_slider.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
 import 'package:flutter_samples/table_column_resize.dart';
+import 'package:flutter_samples/time_input_by_textfield.dart';
 import 'package:flutter_samples/time_of_day.dart';
 import 'package:flutter_samples/key_detection_on_table.dart';
 import 'package:flutter_samples/select_row_with_shift_key.dart';
@@ -115,6 +116,7 @@ class MyApp extends StatelessWidget {
       BlocPattern(),
       RiverpodPattern(),
       ToggleSample(),
+      TimeInputByTextField(),
     ];
     viewList.sort((a, b) => a.runtimeType.toString().compareTo(b.runtimeType.toString()));
     final listView = ListView(children: viewList.map((e) => _createButton(e)).toList());
