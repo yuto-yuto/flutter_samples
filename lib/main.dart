@@ -40,8 +40,8 @@ import 'package:flutter_samples/toggle_sample.dart';
 final navigatorKey = new GlobalKey<NavigatorState>();
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   runApp(
     ProviderScope(
