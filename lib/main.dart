@@ -29,6 +29,7 @@ import 'package:flutter_samples/specify_area_on_slider.dart';
 import 'package:flutter_samples/swipe_list_item.dart';
 import 'package:flutter_samples/tabbar.dart';
 import 'package:flutter_samples/table_column_resize.dart';
+import 'package:flutter_samples/text_field_sample.dart';
 import 'package:flutter_samples/time_input_by_textfield.dart';
 import 'package:flutter_samples/time_of_day.dart';
 import 'package:flutter_samples/key_detection_on_table.dart';
@@ -41,7 +42,7 @@ final navigatorKey = new GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 
   runApp(
     ProviderScope(
@@ -117,6 +118,7 @@ class MyApp extends StatelessWidget {
       RiverpodPattern(),
       ToggleSample(),
       TimeInputByTextField(),
+      TextFieldSample(),
     ];
     viewList.sort((a, b) => a.runtimeType.toString().compareTo(b.runtimeType.toString()));
     final listView = ListView(children: viewList.map((e) => _createButton(e)).toList());
