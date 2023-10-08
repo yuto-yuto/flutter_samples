@@ -48,6 +48,7 @@ class _TextFieldSampleState extends State<TextFieldSample> {
       body: ListView(
         padding: EdgeInsets.all(10),
         children: [
+          TextField(),
           LabeledDivider("Label related"),
           ..._label(),
           SizedBox(height: 20),
@@ -71,24 +72,32 @@ class _TextFieldSampleState extends State<TextFieldSample> {
     return [
       TextField(
         decoration: InputDecoration(
-          label: Text("Label name"),
+          labelText: "Label name",
         ),
       ),
       SizedBox(height: 20),
+      TextField(
+        decoration: InputDecoration(
+          labelText: "Label center",
+          floatingLabelAlignment: FloatingLabelAlignment.center,
+        ),
+      ),
       TextField(
         decoration: InputDecoration(
           labelText: "Label name",
+          labelStyle: TextStyle(fontSize: 20, color: Colors.purple),
           floatingLabelAlignment: FloatingLabelAlignment.center,
         ),
       ),
       SizedBox(height: 20),
       TextField(
         decoration: InputDecoration(
-          label: Text(
-            "Big Label",
-            style: TextStyle(fontSize: 20, color: Colors.purple),
-          ),
-          floatingLabelAlignment: FloatingLabelAlignment.center,
+          label: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Icon(Icons.house),
+            Icon(Icons.watch),
+            Icon(Icons.wallet),
+            Text("Label"),
+          ]),
         ),
       ),
     ];
@@ -135,6 +144,7 @@ class _TextFieldSampleState extends State<TextFieldSample> {
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(width: 6, color: Colors.red),
+            borderRadius: BorderRadius.all(Radius.circular(40)),
           ),
         ),
       ),
