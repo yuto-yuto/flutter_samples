@@ -82,11 +82,29 @@ class _TextFieldSampleState extends State<TextFieldSample> {
           floatingLabelAlignment: FloatingLabelAlignment.center,
         ),
       ),
+      SizedBox(height: 20),
       TextField(
         decoration: InputDecoration(
           labelText: "Label name",
           labelStyle: TextStyle(fontSize: 20, color: Colors.purple),
           floatingLabelAlignment: FloatingLabelAlignment.center,
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        decoration: InputDecoration(
+          floatingLabelAlignment: FloatingLabelAlignment.center,
+          labelText: "Label and Hint text",
+          hintText: "hint text",
+        ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        decoration: InputDecoration(
+          floatingLabelAlignment: FloatingLabelAlignment.center,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          labelText: "Always show Hint and Label",
+          hintText: "hint text",
         ),
       ),
       SizedBox(height: 20),
@@ -99,6 +117,24 @@ class _TextFieldSampleState extends State<TextFieldSample> {
             Text("Label"),
           ]),
         ),
+      ),
+      SizedBox(height: 20),
+      TextField(
+        onChanged: (value) => setState(() {
+          _inputText = value;
+        }),
+        decoration: InputDecoration(
+          labelText: "Label for Preffix and Suffix",
+          hintText: "input something here",
+          prefixText: "preffix_",
+          suffixText: "_suffix",
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(width: 2, color: Colors.black),
+          ),
+        ),
+      ),
+      Center(
+        child: Text("Input text: $_inputText"),
       ),
     ];
   }
@@ -200,23 +236,6 @@ class _TextFieldSampleState extends State<TextFieldSample> {
           ),
         ),
       ),
-      SizedBox(height: 20),
-      TextField(
-        onChanged: (value) => setState(() {
-          _inputText = value;
-        }),
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.thunderstorm),
-          prefixIconColor: Colors.red,
-          prefixText: "prefix...",
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(width: 2, color: Colors.black),
-          ),
-        ),
-      ),
-      Center(
-        child: Text("Input text: $_inputText"),
-      )
     ];
   }
 
@@ -273,7 +292,7 @@ class _TextFieldSampleState extends State<TextFieldSample> {
       TextField(
         maxLength: 10,
         onChanged: (value) {
-          // Require
+          // Requirement
           // at least one lower case
           // at least one upper case
           // at least one number
