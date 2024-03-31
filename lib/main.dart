@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_samples/apply_text_style.dart';
+import 'package:flutter_samples/circuler_color.dart';
 import 'package:flutter_samples/cross_axis_scroll.dart';
 import 'package:flutter_samples/date_time_picker.dart';
 import 'package:flutter_samples/dialog.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_samples/get_widget_info.dart';
 import 'package:flutter_samples/google_auto_login.dart';
 import 'package:flutter_samples/google_drive.dart';
 import 'package:flutter_samples/google_drive_search.dart';
+import 'package:flutter_samples/gradient_color.dart';
 import 'package:flutter_samples/graph.dart';
 import 'package:flutter_samples/grouped_expansion_tile_sample.dart';
 import 'package:flutter_samples/loading_next.dart';
@@ -119,6 +121,8 @@ class MyApp extends StatelessWidget {
       ToggleSample(),
       TimeInputByTextField(),
       TextFieldSample(),
+      CircularColor(),
+      GradientColor(),
     ];
     viewList.sort((a, b) => a.runtimeType.toString().compareTo(b.runtimeType.toString()));
     final listView = ListView(children: viewList.map((e) => _createButton(e)).toList());
