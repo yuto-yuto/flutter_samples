@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_samples/custom_widgets/labeled_divider.dart';
+
 typedef OnColorUpdate = void Function(Color color);
+
+const List<Color> _colors = [
+  Color.fromARGB(255, 255, 0, 0),
+  Color.fromARGB(255, 255, 0, 255),
+  Color.fromARGB(255, 0, 0, 255),
+  Color.fromARGB(255, 0, 255, 255),
+  Color.fromARGB(255, 0, 255, 0),
+  Color.fromARGB(255, 255, 255, 0),
+  Color.fromARGB(255, 255, 0, 0),
+];
 
 class CircularColor extends StatefulWidget {
   @override
@@ -20,30 +32,94 @@ class CircularColorState extends State<CircularColor> {
         appBar: AppBar(
           title: Text("Circular Color"),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 100,
-              width: 300,
-              decoration: BoxDecoration(
-                color: currentColor,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LabeledDivider("Circular Color"),
+              buildCircularColor(60),
+              LabeledDivider("Circular Color with Opacity"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buildCircularColorWithOpacity(60, Colors.black),
+                  buildCircularColorWithOpacity(60, Color.fromARGB(0, 255, 255, 255)),
+                ],
               ),
-            ),
-            GlanularCirculerColorChart(
-              radius: 150,
-              alpha: alpha,
-              brightness: brightness,
-              onColorUpdate: (color) {
-                setState(() {
-                  currentColor = color;
-                });
-              },
-            ),
-            ...buildSliders(),
-          ],
+              LabeledDivider("Final artifact"),
+              Container(
+                height: 100,
+                width: 300,
+                decoration: BoxDecoration(
+                  color: currentColor,
+                ),
+              ),
+              GlanularCirculerColorChart(
+                radius: 150,
+                alpha: alpha,
+                brightness: brightness,
+                onColorUpdate: (color) {
+                  setState(() {
+                    currentColor = color;
+                  });
+                },
+              ),
+              ...buildSliders(),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget buildCircularColor(double radius) {
+    final diameter = 2 * radius;
+
+    return Container(
+      width: diameter,
+      height: diameter,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
+        ),
+        gradient: const SweepGradient(
+          colors: _colors,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            spreadRadius: 0.5,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCircularColorWithOpacity(double radius, Color second) {
+    final diameter = 2 * radius;
+
+    final opacityCircle = Container(
+      width: diameter,
+      height: diameter,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
+        ),
+        gradient: RadialGradient(
+          colors: [
+            Colors.white,
+            second,
+          ],
+          stops: [0.0, 1.0],
+        ),
+      ),
+    );
+
+    return Stack(
+      children: [
+        buildCircularColor(radius),
+        opacityCircle,
+      ],
     );
   }
 
@@ -105,16 +181,6 @@ class GlanularCirculerColorChart extends StatelessWidget {
     this.onColorUpdate,
   });
 
-  static const List<Color> _colors = [
-    Color.fromARGB(255, 255, 0, 0),
-    Color.fromARGB(255, 255, 0, 255),
-    Color.fromARGB(255, 0, 0, 255),
-    Color.fromARGB(255, 0, 255, 255),
-    Color.fromARGB(255, 0, 255, 0),
-    Color.fromARGB(255, 255, 255, 0),
-    Color.fromARGB(255, 255, 0, 0),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final diameter = 2 * radius;
@@ -151,18 +217,6 @@ class GlanularCirculerColorChart extends StatelessWidget {
             Color.fromARGB(0, 255, 255, 255),
           ],
           stops: [0.0, 1.0],
-        ),
-      ),
-    );
-
-    final tapCircle = Positioned(
-// left: ,
-// top: ,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          ),
         ),
       ),
     );
@@ -204,9 +258,9 @@ class GlanularCirculerColorChart extends StatelessWidget {
       math.pow(distanceXFromCenter, 2) + math.pow(distanceYFromCenter, 2),
     );
 
-    // theta is known as well as radian. The range is -PI to PI.
-    final theta = math.atan2(distanceXFromCenter, distanceYFromCenter);
-    final degree = convertThetaToDegree(theta);
+    // The range is -PI to PI.
+    final radian = math.atan2(distanceXFromCenter, distanceYFromCenter);
+    final degree = convertThetaToDegree(radian);
 
     final saturation = internalRadius >= radius ? 1.0 : internalRadius / radius;
 
@@ -216,8 +270,8 @@ class GlanularCirculerColorChart extends StatelessWidget {
   }
 
   /// convertThetaToDegree converts double value to 0 - 360.
-  double convertThetaToDegree(double theta) {
-    final degree = theta * (180 / math.pi) - 90;
+  double convertThetaToDegree(double radian) {
+    final degree = radian * (180 / math.pi) - 90;
     if (degree < 0) {
       return degree + 360;
     }
