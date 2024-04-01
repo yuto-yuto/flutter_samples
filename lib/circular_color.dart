@@ -54,7 +54,7 @@ class CircularColorState extends State<CircularColor> {
                   color: currentColor,
                 ),
               ),
-              GlanularCirculerColorChart(
+              GlanularCircularColorChart(
                 radius: 150,
                 alpha: alpha,
                 brightness: brightness,
@@ -167,13 +167,13 @@ class CircularColorState extends State<CircularColor> {
   }
 }
 
-class GlanularCirculerColorChart extends StatelessWidget {
+class GlanularCircularColorChart extends StatelessWidget {
   final double radius;
   final double alpha;
   final double brightness;
   final OnColorUpdate? onColorUpdate;
 
-  const GlanularCirculerColorChart({
+  const GlanularCircularColorChart({
     super.key,
     required this.radius,
     this.alpha = 1.0,

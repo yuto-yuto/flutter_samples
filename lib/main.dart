@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_samples/apply_text_style.dart';
-import 'package:flutter_samples/circuler_color.dart';
+import 'package:flutter_samples/circular_color.dart';
 import 'package:flutter_samples/cross_axis_scroll.dart';
 import 'package:flutter_samples/date_time_picker.dart';
 import 'package:flutter_samples/dialog.dart';
